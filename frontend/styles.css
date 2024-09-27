@@ -8,7 +8,7 @@
 .home-page {
     display: flex;
     justify-content: center;
-
+    flex-direction: column;
 }
 
 /* Styles for the search container and background */
@@ -16,36 +16,36 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 30vh; /* Take up 50% of the viewport height */
-    width: 100%; /* Full width of the screen */
+    height: 30vh; 
+    width: 100%; 
 }
 
 .search-background-home {
-    background-image: url('/frontend/images/tallahassee3.png'); /* Your background image here */
+    background-image: url('/frontend/images/tallahassee3.png');
     background-size: cover;
     background-position: center;
-    position: absolute;
-    width: 100%; /* Stretch horizontally across the screen */
-    max-height: 1000px; /* Limit vertical height */
-    padding: 100px;
+    position: relative;
+    width: 100%; 
+    max-height: 900px; 
+    padding: 150px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(100px); /* Apply blur effect */
+    backdrop-filter: blur(100px);
 }
 
 .search-background-home h1 {
     font-size: 3rem;
     color: white;
     margin-bottom: 20px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Shadow to make text more readable */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .search-box-home {
     display: flex;
-    width: 80%; /* Search box width */
+    width: 80%;
     justify-content: center;
     gap: 10px;
 }
@@ -113,6 +113,72 @@ header .login-btn {
     font-size: 16px;
 }
 
+/*Footer*/
+footer {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+footer ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+footer ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+
+/* Featured Listings */
+.featured-listings {
+    padding: 60px 0;
+    text-align: center;
+    justify-content: center;
+    width: 100%; 
+    margin: 0 auto; 
+    display: flex;
+}
+
+.apartment-text-home{
+    justify-content: center;
+    text-align: center;
+    margin-top: 100px;
+    font-size: 2rem;
+}
+
+
+.apartment-grid-home {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 60%;
+    margin-top: 40px;
+}
+
+.apartment-item-home {
+    width: 30%;
+    height: 100%;
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.apartment-item-home img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
 main {
     display: flex;
     height: calc(100vh - 60px); 
@@ -151,13 +217,13 @@ main {
     border-radius: 4px;
 }
 
-/* Map container: Takes up the left side and fits the screen height */
+/* Map container*/
 .map-container {
-    width: 100%; /* Takes 50% of the screen width */
-    height: 90%; /* Takes 100% of the screen height */
-    background-color: #e0e0e0; /* Placeholder color */
-    position: relative; /* Required for map integration */
-    overflow: hidden; /* Prevent scrolling */
+    width: 100%; 
+    height: 90%; 
+    background-color: #e0e0e0; 
+    position: relative;
+    overflow: hidden; 
 }
 
 /* Second header for search and filters */
@@ -167,7 +233,7 @@ main {
     justify-content: space-between;
     align-items: center;
     padding: 5px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); 
 }
 
 /* Search container */
@@ -304,19 +370,13 @@ main {
 }
 
 .login-page .background-blur {
-    position: fixed; /* Fixes the background to the viewport */
+    position: fixed; 
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('images/LoginBackground.webp') no-repeat center center / cover; /* Change path to your image */
-    filter: blur(8px); /* Adjust blur amount */
-    z-index: -1; /* Ensure it stays behind other elements */
+    background: url('images/LoginBackground.webp') no-repeat center center / cover;
+    filter: blur(8px);
+    z-index: -1;
 }
 
-/* Responsive styles for login */
-@media (max-width: 768px) {
-    .login-page .login-container {
-        width: 90%;
-    }
-}
