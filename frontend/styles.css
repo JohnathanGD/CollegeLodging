@@ -4,11 +4,74 @@
     padding: 0;
     box-sizing: border-box;
 }
-/* Home Page Styling */
+
+
 .home-page {
     display: flex;
     justify-content: center;
+    height: auto;
+}
 
+/* Apartment Search Prompt Section */
+.content-block {
+    text-align: center;
+    padding: 20px;
+    background-color: #CEB888;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.content-block h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.content-block h3 {
+    font-size: 20px;
+    color: #636262;
+    margin-bottom: 20px;
+}
+
+.content-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.content-buttons button {
+    background-color: #782F40;
+    border: none;
+    color: white;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+    width: 200px;
+    height: 200px; 
+    overflow: hidden; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.content-buttons button img {
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover;
+}
+
+.content-buttons button:hover {
+    background-color: #782F40;
+}
+
+.content-buttons button:focus {
+    outline: none;
+    box-shadow: 0px 0px 10px #682b39;
 }
 
 /* Styles for the search container and background */
@@ -26,7 +89,6 @@
     background-position: center;
     position: absolute;
     width: 100%; /* Stretch horizontally across the screen */
-    max-height: 1000px; /* Limit vertical height */
     padding: 100px;
     display: flex;
     flex-direction: column;
@@ -44,25 +106,28 @@
 }
 
 .search-box-home {
-    display: flex;
-    width: 80%; /* Search box width */
-    justify-content: center;
-    gap: 10px;
+    text-align: center;
+    padding: 20px;
+    width: auto;
+    background-color: #782F40;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .search-box-home input {
     padding: 15px;
     font-size: 18px;
     border-radius: 8px;
+    width: 50%;
     border: none;
     width: 70%;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .search-box-home button {
-    padding: 15px 25px;
+    padding: 14px;
     font-size: 18px;
-    background-color: #ff5722;
+    background-color:#CEB888;
     color: white;
     border: none;
     border-radius: 8px;
@@ -79,8 +144,8 @@ body {
 }
 
 header {
-    background-color: white;
-    color: black;
+    background-color: #782F40;
+    color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -99,7 +164,7 @@ header nav ul {
 }
 
 header nav ul li a {
-    color: black;
+    color: white;
     text-decoration: none;
     font-size: 18px;
 }
@@ -115,7 +180,7 @@ header .login-btn {
 
 main {
     display: flex;
-    height: calc(100vh - 60px); 
+    height: calc(100vh - 60px);
 }
 
 /* Left side (search + map) */
