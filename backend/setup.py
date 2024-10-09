@@ -29,4 +29,13 @@ cursor.execute("""
         type VARCHAR(100)
     ); 
 """)
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS apartments(
+        apartment_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        rent REAL,
+        address TEXT,
+        bedrooms INTEGER
+    )
+""")
+
 print("Table 'login' created successfully.")
