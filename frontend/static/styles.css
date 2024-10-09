@@ -21,7 +21,7 @@
 }
 
 .search-background-home {
-    background-image: url('/frontend/images/tallahassee3.png'); /* Your background image here */
+    background-image: url('images/tallahassee3.png'); /* Your background image here */
     background-size: cover;
     background-position: center;
     position: absolute;

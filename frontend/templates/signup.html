@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
-    <link rel="stylesheet" href="../styles.css"> <!-- Adjust path as needed -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- Adjust path as needed -->
 </head>
 <body>
     <header>
         <div class="logo">College Lodging</div>
         <nav>
             <ul>
-                <li><a href="../index.html">Home</a></li>
+                <li><a href="/index.html">Home</a></li>
             </ul>
         </nav>
     </header>
@@ -20,7 +20,7 @@
         <div class="background-blur"></div>
         <div class="login-container">
             <h2>Create an account</h2>
-            <form action="../index.html" method="post">
+            <form action="{{ url_for('signup') }}" method="POST">
                 <!-- First Name -->
                 <label for="first-name">First Name:</label>
                 <input type="text" id="first-name" name="first-name" required>

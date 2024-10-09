@@ -24,7 +24,9 @@ cursor.execute("USE Lodging;")
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS login (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(100),
+        firstname VARCHAR(100),
+        lastname VARCHAR(100),  
+        email VARCHAR(100),       
         password VARCHAR(100),
         type VARCHAR(100)
     ); 
