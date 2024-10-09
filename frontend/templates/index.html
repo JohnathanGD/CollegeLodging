@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>College Lodging</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
@@ -12,7 +12,7 @@
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li><a href="screens/login.html">Login</a></li>
+                <li><a href="login.html">Login</a></li>
             </ul>
         </nav>
     </header>
@@ -23,7 +23,9 @@
                 <h1>Discover Your New Home</h1>
                 <div class="search-box-home">
                     <input type="text" placeholder="Enter a location" id="home-search-input">
-                    <button id="home-search-btn" onclick="window.location.href='screens/ApartmentSearch.html'">Search</button>
+                    <form action="{{ url_for('apartment_search') }}" method="GET">
+                        <button type="submit" id="home-search-btn">Search</button>
+                    </form>
                 </div>
             </div>
         </div>
