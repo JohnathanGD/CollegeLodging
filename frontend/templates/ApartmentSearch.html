@@ -5,7 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>College Lodging test</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" defer></script>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7gaBE8_0O0TkH-4BqkU-gobPicFEyIwE&callback=initMap&libraries=places" defer></script>
+    <script>
+        let map, service, infowindow;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 30.4419, lng: -84.2985 },
+                zoom: 14
+            });
+
+            service = new google.maps.places.PlacesService(map);
+
+            const request = {
+                location: { lat: 30.4419, lng: -84.2985 },
+                radius: 8047, 
+                query: 'all apartments around florida state university'
+            };
+
+            service.textSearch(request, function(results, status) {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    for (let i = 0; i < results.length; i++) {
+                        const place = results[i];
+                        createMarker(place);
+                    }
+                } else {
+                    console.error("Places search failed due to: " + status);
+                }
+            });
+        }
+
+        function createMarker(place) {
+        const marker = new google.maps.Marker({
+            map: map,
+            position: place.geometry.location
+        });
+    }
+
+
+    </script>
 </head>
 <body>
     <header>
@@ -63,13 +102,7 @@
     <main>
         <div class="left-side">
             <div class="map-container">
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=..." 
-                    width="100%" 
-                    height="100%" 
-                    style="border:0;" 
-                    allowfullscreen="" 
-                    loading="lazy"></iframe>
+                <div id="map" style="width: 100%; height: 100%;"></div>
             </div>
         </div>
 
@@ -85,7 +118,5 @@
             </div>
         </div>
     </main>
-
-    <script src="/backend/mapscript.js"></script>
 </body>
 </html>
