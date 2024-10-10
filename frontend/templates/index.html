@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>College Lodging</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7gaBE8_0O0TkH-4BqkU-gobPicFEyIwE&libraries=places"></script>
 </head>
 <body>
     <header>
@@ -25,11 +26,70 @@
                     <input type="text" placeholder="Enter a location" id="home-search-input">
                     <form action="{{ url_for('apartment_search') }}" method="GET">
                         <button type="submit" id="home-search-btn">Search</button>
+                        
                     </form>
+                    
                 </div>
             </div>
         </div>
     </main>
+
+    <section class="content-block">
+        <h2>Apartments Near Florida State University You May Like</h2>
+        <div id="apartments-list"></div>
+    </section>
+
+    <script>
+        function initMap() {
+            const service = new google.maps.places.PlacesService(document.createElement('div'));
+
+            const request = {
+                location: { lat: 30.4419, lng: -84.2985 },
+                radius: 8047, 
+                keyword: 'student housing, student apartments, off-campus housing',
+                type: ['apartment']
+            };
+
+            service.nearbySearch(request, (results, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    let count = 0;
+                    results.forEach(place => {
+                        if (count < 5) {
+                            getDistanceFromFSU(place);
+                            count++;
+                        }
+                    });
+                }
+            });
+        }
+
+        function getDistanceFromFSU(place) {
+            const distanceService = new google.maps.DistanceMatrixService();
+            distanceService.getDistanceMatrix({
+                origins: [{ lat: 30.4419, lng: -84.2985 }], //fsu's location
+                destinations: [place.geometry.location],
+                travelMode: google.maps.TravelMode.DRIVING
+            }, (response, status) => {
+                if (status === 'OK') {
+                    const distance = response.rows[0].elements[0].distance.text;
+                    displayApartment(place, distance);
+                }
+            });
+        }
+
+        function displayApartment(place, distance) {
+            const apartmentList = document.getElementById('apartments-list');
+            const apartmentItem = document.createElement('div');
+            apartmentItem.classList.add('apartment-item');
+            apartmentItem.innerHTML = `
+                    <h3>${place.name}</h3>
+                    <p>Distance from FSU: ${distance}</p>
+            `;
+            apartmentList.appendChild(apartmentItem);
+        }
+
+        window.onload = initMap;
+    </script>
 
     <section class="content-block">
         <h2>What type of apartments are you looking for near you?</h2>
@@ -58,14 +118,8 @@
         </div>
     </section>
 
-    <section class="content-block">
-        <h2>What type of apartments are you looking for near you?</h2>
-        <h3>Select the apartment style that best suites your needs</h3>
-    </section>
 
     
-    
-
-
 </body>
 </html>
+
