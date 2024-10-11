@@ -1,5 +1,8 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, g
+from flask import current_app as app
+
 import mysql.connector
+from mysql.connector import Error
 
 app = Flask(
     __name__,
@@ -7,14 +10,30 @@ app = Flask(
     static_folder= "../frontend/static"
 )
 
+app.config.from_pyfile('config.py')
+
 # Database connection
 def get_db_connection():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="CollegeLodging",
-        database="Lodging"
-    )
+    if 'db_conn' not in g:
+        try:
+            g.db_conn = mysql.connector.connect(
+                host=app.config['DB_HOST'],
+                user=app.config['DB_USER'],
+                password=app.config['DB_PASSWORD'],
+                database=app.config['DB_NAME'],
+                port=app.config['DB_PORT']
+            )
+        except Error as e:
+            app.logger.error(f"Error connecting to MySQL: {e}")
+            return None
+    return g.db_conn
+
+# Close database connection
+@app.teardown_appcontext
+def close_db_connection(exception=None):
+    db_conn = g.pop('db_conn', None)
+    if db_conn is not None:
+        db_conn.close()
 
 # Sign up route to handle form submissions
 @app.route('/signup', methods=['GET', 'POST'])
@@ -28,6 +47,7 @@ def signup():
         print(first_name,last_name,email,password)
         # Connect to the database
         conn = get_db_connection()
+
         cursor = conn.cursor()
 
         # Insert user data into the database
@@ -49,7 +69,6 @@ def signup():
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 @app.route('/login')
 def login():
