@@ -40,18 +40,19 @@ def close_db_connection(exception=None):
 def signup():
     if request.method == 'POST':
         # Retrieve form data from the HTML form
-        first_name = request.form['first-name']
-        last_name = request.form['last-name']
-        email = request.form['email']
-        password = request.form['password']
+        print(request.form.get('first-name'))
+        first_name = request.form.get('first-name')
+        last_name = request.form.get('last-name')
+        email = request.form.get('email')
+        password = request.form.get('password')
+
         print(first_name,last_name,email,password)
         # Connect to the database
         conn = get_db_connection()
-
         cursor = conn.cursor()
 
         # Insert user data into the database
-        query = 'INSERT INTO login (firstname, lastname, email, password) VALUES (%s, %s, %s, %s)'
+        query = 'INSERT INTO users (firstname, lastname, email, password) VALUES (%s, %s, %s, %s)'
         cursor.execute(query, (first_name, last_name, email, password))
 
         # Commit the changes and close the connection
