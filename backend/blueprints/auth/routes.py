@@ -5,6 +5,7 @@ from mysql.connector import Error
 from backend.models.users import User
 from werkzeug.security import generate_password_hash
 from backend.db import get_db_connection
+from utils.decorators import unauthenticated_user
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -14,6 +15,7 @@ def close_db_connection(exception=None):
         db_connection.close()
 
 @auth_bp.route('/signup', methods=['GET', 'POST'])
+@unauthenticated_user
 def signup():
     if request.method == 'POST':
         email = request.form.get('email')
@@ -54,6 +56,7 @@ def signup():
     return render_template('signup.html')
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
+@unauthenticated_user
 def login():
     if request.method == 'POST':
         email = request.form.get('email')
@@ -71,7 +74,6 @@ def login():
     return render_template('login.html')
 
 @auth_bp.route('/logout')
-@login_required
 def logout():
     logout_user()
     flash('You have been logged out.', 'success')

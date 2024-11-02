@@ -13,7 +13,11 @@
         <nav>
             <ul>
                 <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                {% else %}
                 <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>
@@ -26,7 +30,6 @@
                     <input type="text" placeholder="Enter a location" id="home-search-input">
                     <form action="{{ url_for('main.apartment_search') }}" method="GET">
                         <button type="submit" id="home-search-btn">Search</button>
-                        
                     </form>
                     
                 </div>
