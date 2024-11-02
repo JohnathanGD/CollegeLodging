@@ -1,0 +1,53 @@
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
+from backend.db import get_db_connection
+
+class User(UserMixin):
+    def __init__(self, id, email, firstname, lastname, password_hash):
+        self.id = id
+        self.email = email
+        self.firstname = firstname
+        self.lastname = lastname
+        self.password_hash = password_hash
+    
+    @staticmethod
+    def get_by_id(user_id): # Get user by ID
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+        user_data = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        if user_data:
+            return User(
+                id=user_data['id'],
+                email=user_data['email'],
+                firstname=user_data['firstname'],
+                lastname=user_data['lastname'],
+                password_hash=user_data['password']
+            )
+        return None
+
+    @staticmethod
+    def get_by_email(email): # Get user by email
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+        user_data = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        if user_data:
+            return User(
+                id=user_data['id'],
+                email=user_data['email'],
+                firstname=user_data['firstname'],
+                lastname=user_data['lastname'],
+                password_hash=user_data['password']
+            )
+        return None
+
+    def set_password(self, password): # Set password
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password): # Check password
+        return check_password_hash(self.password_hash, password)

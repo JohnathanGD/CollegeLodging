@@ -1,43 +1,48 @@
+from setuptools import setup, find_packages
 import mysql.connector
+from mysql.connector import Error
+from flask import current_app as app
+from backend import create_app
 
-# Database connection parameters
-host = "localhost"
-user = "root"
-password = "CollegeLodging"
+app = create_app()
 
-# Establish connection using mysqlclient (or mysql.connector)
-db = mysql.connector.connect(
-    host=host,
-    user=user,
-    passwd=password
-)
-cursor = db.cursor()
+def setup_db():
+    db_connection = None
 
-# Create a new database
-cursor.execute("CREATE DATABASE IF NOT EXISTS Lodging;")
-print("Database 'Lodging' created successfully.")
+    try:
+        with app.app_context():
+            db_connection = mysql.connector.connect(
+                host=app.config['DB_HOST'],
+                user=app.config['DB_USER'],
+                password=app.config['DB_PASSWORD'],
+                port=app.config['DB_PORT']
+            )
 
-# Select the newly created database
-cursor.execute("USE Lodging;")
+            cursor = db_connection.cursor()
+            db_name = app.config['DB_NAME']
+            cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name};")
+            cursor.execute(f"USE {db_name};")
 
-# Create a new table
-cursor.execute("""
-    CREATE TABLE IF NOT EXISTS login (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        firstname VARCHAR(100),
-        lastname VARCHAR(100),  
-        email VARCHAR(100),       
-        password VARCHAR(100),
-        type VARCHAR(100)
-    ); 
-""")
-cursor.execute("""
-    CREATE TABLE IF NOT EXISTS apartments(
-        apartment_id INTEGER PRIMARY KEY AUTO_INCREMENT,
-        rent REAL,
-        address TEXT,
-        bedrooms INTEGER
-    )
-""")
+            create_users_table = """
+                CREATE TABLE IF NOT EXISTS users (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    email VARCHAR(100) NOT NULL UNIQUE,
+                    password VARCHAR(100) NOT NULL,
+                    first_name VARCHAR(100),
+                    last_name VARCHAR(100),
+                    user_type VARCHAR(100)
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """
 
-print("Table 'login' created successfully.")
+            cursor.execute(create_users_table)
+            db_connection.commit()
+    except Error as e:
+        print(f"Error connecting to the database: {e}")
+    finally:
+        if db_connection and db_connection.is_connected():
+            cursor.close()
+            db_connection.close()
+
+if __name__ == '__main__':
+    setup_db()

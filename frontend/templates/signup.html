@@ -11,7 +11,7 @@
         <div class="logo">College Lodging</div>
         <nav>
             <ul>
-                <li><a href="/index.html">Home</a></li>
+                <li><a href="{{ url_for('main.index') }}">Home</a></li>
             </ul>
         </nav>
     </header>
@@ -20,7 +20,7 @@
         <div class="background-blur"></div>
         <div class="login-container">
             <h2>Create an account</h2>
-            <form action="{{ url_for('signup') }}" method="POST">
+            <form action="{{ url_for('auth.signup') }}" method="POST">
                 <!-- First Name -->
                 <label for="first-name">First Name:</label>
                 <input type="text" id="first-name" name="first-name" required>
