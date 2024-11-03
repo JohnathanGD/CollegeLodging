@@ -6,6 +6,7 @@ from backend.models.users import User
 from werkzeug.security import generate_password_hash
 from backend.db import get_db_connection
 from utils.decorators import unauthenticated_user
+import utils.queries as queries
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -23,35 +24,18 @@ def signup():
         firstname = request.form.get('first-name')
         lastname = request.form.get('last-name')
 
-        conn = get_db_connection()
-        if conn is None:
-            flash('Database connection failed. Please try again later.', 'error')
+        if User.get_by_email(email):
+            flash('User with this email already exists.', 'error')
             return redirect(url_for('auth.signup'))
 
-        try:
-            cursor = conn.cursor()
-            if cursor is None:
-                flash('Database cursor creation failed. Please try again later.', 'error')
-                return redirect(url_for('auth.signup'))
+        params = (email, generate_password_hash(password), firstname, lastname)
 
-            password_hash = generate_password_hash(password)
-            query = '''
-            INSERT INTO users (email, password, firstname, lastname)
-            VALUES (%s, %s, %s, %s)
-            '''
-            cursor.execute(query, (email, password_hash, firstname, lastname))
-            conn.commit()
-            cursor.close()
-            conn.close()
-
+        if (queries.execute_query(queries.INSERT_NEW_USER, params)):
             flash('Signup successful! Please log in.', 'success')
             return redirect(url_for('auth.login'))
-        except Exception as e:
+        else:
             flash('An error occurred during signup. Please try again later.', 'error')
-            if cursor:
-                cursor.close()
-            if conn:
-                conn.close()
+            return redirect(url_for('auth.signup'))
 
     return render_template('signup.html')
 

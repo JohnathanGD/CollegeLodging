@@ -3,6 +3,7 @@ import mysql.connector
 from mysql.connector import Error
 from flask import current_app as app
 from backend import create_app
+import utils.queries as queries
 
 app = create_app()
 
@@ -20,22 +21,13 @@ def setup_db():
 
             cursor = db_connection.cursor()
             db_name = app.config['DB_NAME']
-            cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name};")
-            cursor.execute(f"USE {db_name};")
 
-            create_users_table = """
-                CREATE TABLE IF NOT EXISTS users (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    email VARCHAR(100) NOT NULL UNIQUE,
-                    password VARCHAR(100) NOT NULL,
-                    first_name VARCHAR(100),
-                    last_name VARCHAR(100),
-                    user_type VARCHAR(100)
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-            """
+            params = (db_name,)
 
-            cursor.execute(create_users_table)
+            cursor.execute(queries.CREATE_DB, params)
+            cursor.execute(queries.USE_DB, params)
+            cursor.execute(queries.CREATE_USERS_TABLE)
+            
             db_connection.commit()
     except Error as e:
         print(f"Error connecting to the database: {e}")

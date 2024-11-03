@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from backend.db import get_db_connection
+import utils.queries as queries
 
 class User(UserMixin):
     def __init__(self, id, email, firstname, lastname, password_hash):
@@ -12,12 +13,8 @@ class User(UserMixin):
     
     @staticmethod
     def get_by_id(user_id): # Get user by ID
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
-        user_data = cursor.fetchone()
-        cursor.close()
-        conn.close()
+        params = (user_id,)
+        user_data = queries.execute_query_with_results(queries.GET_USER_BY_ID, params, dictionary=True, fetch_one=True)
         if user_data:
             return User(
                 id=user_data['id'],
@@ -30,12 +27,8 @@ class User(UserMixin):
 
     @staticmethod
     def get_by_email(email): # Get user by email
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
-        user_data = cursor.fetchone()
-        cursor.close()
-        conn.close()
+        params = (email,)
+        user_data = queries.execute_query_with_results(queries.GET_USER_BY_EMAIL, params, dictionary=True, fetch_one=True)
         if user_data:
             return User(
                 id=user_data['id'],
