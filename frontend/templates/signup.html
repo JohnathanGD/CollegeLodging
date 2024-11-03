@@ -40,6 +40,12 @@
                 <!-- Submit Button -->
                 <button type="submit">Sign Up</button>
             </form>
+
+            <div class="login-redirect"></div>
+                <p>
+                    Already have an account? <a href="{{ url_for('auth.login') }}">Login</a>
+                </p>
+            </div>
         </div>
     </main>
 </body>

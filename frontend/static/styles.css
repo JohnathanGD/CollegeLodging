@@ -422,3 +422,19 @@ main {
         width: 90%;
     }
 }
+
+/* Login redirect link */
+.login-page .login-container .login-redirect {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.login-page .login-container .login-redirect a {
+    color: #782F40;
+    text-decoration: none;
+}
+
+.login-page .login-container .login-redirect a:hover {
+    color: #CEB888;
+    text-decoration: underline;
+}
