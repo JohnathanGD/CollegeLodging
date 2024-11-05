@@ -18,3 +18,10 @@ def login_required(view):
         return redirect(url_for('auth.login'))
     return decorated_function
 
+def admin_only(view):
+    @wraps(view)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_admin:
+            return redirect(url_for('main.index'))
+        return view(*args, **kwargs)
+    return decorated_function
