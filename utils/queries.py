@@ -2,8 +2,8 @@ from backend.db import get_db_connection
 from flask import g, current_app as app
 
 # Database Queries
-CREATE_DATABASE = "CREATE DATABASE %s IF NOT EXISTS;"
-USE_DATABASE = "USE %s;"
+CREATE_DATABASE = "CREATE DATABASE IF NOT EXISTS {};"
+USE_DATABASE = "USE {};"
 
 CREATE_TABLE_WITH_COLUMNS = "CREATE TABLE IF NOT EXISTS %s (%s);"
 

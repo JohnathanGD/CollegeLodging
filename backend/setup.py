@@ -1,3 +1,7 @@
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from setuptools import setup, find_packages
 import mysql.connector
 from mysql.connector import Error
@@ -22,13 +26,14 @@ def setup_db():
             cursor = db_connection.cursor()
             db_name = app.config['DB_NAME']
 
-            params = (db_name,)
+            print(f"Creating database {db_name}...")
 
-            cursor.execute(queries.CREATE_DB, params)
-            cursor.execute(queries.USE_DB, params)
+            cursor.execute(queries.CREATE_DATABASE.format(db_name))
+            cursor.execute(queries.USE_DATABASE.format(db_name))
             cursor.execute(queries.CREATE_USERS_TABLE)
-            
             db_connection.commit()
+
+            print(f"Database {db_name} created successfully.")
     except Error as e:
         print(f"Error connecting to the database: {e}")
     finally:
