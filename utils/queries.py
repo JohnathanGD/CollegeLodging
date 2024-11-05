@@ -68,10 +68,21 @@ GET_USER_BY_USERNAME = "SELECT * FROM users WHERE username = %s;"
 INSERT_NEW_USER = '''INSERT INTO users (email, password, firstname, lastname) 
 VALUES (%s, %s, %s, %s);'''
 
+INSERT_NEW_USER_WITH_USER_TYPE = '''INSERT INTO users (email, password, firstname, lastname, user_type)
+VALUES (%s, %s, %s, %s, %s);'''
+
+INSERT_NEW_USER_WITH_IS_ADMIN = '''INSERT INTO users (email, password, firstname, lastname, is_admin)
+VALUES (%s, %s, %s, %s, %s);'''
+
+INSERT_NEW_USER_WITH_USER_TYPE_AND_IS_ADMIN = '''INSERT INTO users (email, password, firstname, lastname, user_type, is_admin)
+VALUES (%s, %s, %s, %s, %s, %s);'''
+
 UPDATE_USER_PASSWORD = "UPDATE users SET password = %s WHERE id = %s;"
 UPDATE_USER_EMAIL = "UPDATE users SET email = %s WHERE id = %s;"
 UPDATE_USER_FIRSTNAME = "UPDATE users SET firstname = %s WHERE id = %s;"
 UPDATE_USER_LASTNAME = "UPDATE users SET lastname = %s WHERE id = %s;"
+UPDATE_USER_USER_TYPE = "UPDATE users SET user_type = %s WHERE id = %s;"
+UPDATE_USER_IS_ADMIN = "UPDATE users SET is_admin = %s WHERE id = %s;"
 
 DELETE_USER = "DELETE FROM users WHERE id = %s;"
 
