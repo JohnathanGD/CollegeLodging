@@ -4,12 +4,14 @@ from backend.db import get_db_connection
 import utils.queries as queries
 
 class User(UserMixin):
-    def __init__(self, id, email, firstname, lastname, password_hash):
+    def __init__(self, id, email, firstname, lastname, password_hash, is_admin=False, user_type='user'):
         self.id = id
         self.email = email
         self.firstname = firstname
         self.lastname = lastname
-        self.password_hash = password_hash
+        self.password_hash = password_hash  
+        self.is_admin = is_admin
+        self.user_type = user_type
     
     @staticmethod
     def get_by_id(user_id): # Get user by ID
@@ -21,7 +23,9 @@ class User(UserMixin):
                 email=user_data['email'],
                 firstname=user_data['firstname'],
                 lastname=user_data['lastname'],
-                password_hash=user_data['password']
+                password_hash=user_data['password'],
+                is_admin=user_data['is_admin'],
+                user_type=user_data['user_type']
             )
         return None
 
@@ -35,7 +39,9 @@ class User(UserMixin):
                 email=user_data['email'],
                 firstname=user_data['firstname'],
                 lastname=user_data['lastname'],
-                password_hash=user_data['password']
+                password_hash=user_data['password'],
+                is_admin=user_data['is_admin'],
+                user_type=user_data['user_type']
             )
         return None
 

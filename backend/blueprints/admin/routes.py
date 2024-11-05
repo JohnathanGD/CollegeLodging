@@ -4,7 +4,7 @@ from backend.models.users import User
 from werkzeug.security import generate_password_hash
 from backend.db import get_db_connection
 import utils.queries as queries
-from utils.decorators import unauthenticated_user
+from utils.decorators import unauthenticated_user, login_required, admin_only
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -36,3 +36,9 @@ def signup():
             return redirect(url_for('admin.signup'))
         
     return render_template('admin/admin_signup.html')
+
+@admin_bp.route('/dashboard')
+@login_required
+@admin_only
+def dashboard():
+    return render_template('admin/admin_dashboard.html')
