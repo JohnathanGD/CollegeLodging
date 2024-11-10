@@ -12,10 +12,11 @@
     <nav class="sidebar close">
         <header>
             <div class="image-text">
-                <span class="image">
-                    <img src="{{ url_for('static', filename='images/logo_small.png') }}" alt="Logo">
-                </span>
-
+                <a href="{{ url_for('main.index') }}">
+                    <span class="image">
+                        <img src="{{ url_for('static', filename='images/logo_small.png') }}" alt="Logo">
+                    </span>
+                </a>
                 <div class="text logo-text">
                     <span>
                         <img class="name" src="{{ url_for('static', filename='images/logo_small2.png') }}" alt="Logo Banner">
