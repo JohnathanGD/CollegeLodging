@@ -6,6 +6,11 @@
     <title>Document</title>
 </head>
 <body>
-    <p>Admin Dashboard</p>
+    {% block dashboard_header %}
+        <h1>Dashboard</h1>
+    {% endblock %}
+    {% block content %}
+        <p>Dashboard content</p>
+    {% endblock %}
 </body>
 </html>

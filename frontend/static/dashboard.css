@@ -381,3 +381,13 @@ body .sidebar.close + .dashboard-header {
     font-size: 25px;
     cursor: pointer;
 }
+
+.dashboard-content {
+    margin-left: 88px;
+    transition: var(--tran-05);
+    padding: 20px;
+}
+
+.dashboard-content.sidebar-close {
+    margin-left: 250px;
+}

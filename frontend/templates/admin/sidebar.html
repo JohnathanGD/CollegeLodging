@@ -39,7 +39,7 @@
                     </li>
 
                     <li class="nav-link">
-                        <a href="#">
+                        <a href="{{ url_for('admin.database') }}">
                             <i class='bx bxs-data icon' ></i>
                             <span class="text nav-text">Database</span>
                         </a>
@@ -115,13 +115,21 @@
         </div>
     </section>
 
+    <section class="dashboard-content">
+        {% block content %}
+            <p>Dashboard content</p>
+        {% endblock %}
+    </section>
+
     <script>
         const body = document.querySelector('body'),
         sidebar = document.querySelector('.sidebar');
         toggle = document.querySelector(".toggle"),
+        content = document.querySelector('.dashboard-content');
 
         toggle.addEventListener("click" , () =>{
             sidebar.classList.toggle("close");
+            content.classList.toggle("sidebar-close");
         })
     </script>
 </body>
