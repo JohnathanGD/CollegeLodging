@@ -182,6 +182,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 400px; /* Same as the minimum height of the background */
     height: 30vh; /* Take up 50% of the viewport height */
     width: 100%; /* Full width of the screen */
 }
@@ -194,14 +195,15 @@
     width: 100%; 
     height: calc(50vh - 100px); /* Adjusted height to avoid covering the header */
     padding: 100px;
+    min-height: 400px; /* Set a minimum height to prevent it from shrinking */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(100px); /* Apply blur effect */
-    margin-bottom: 110px; /* Adds space below the image section */
-    padding-bottom: 40px; /* Adds space below without shrinking the image */
+    margin-bottom: 80px; /* Adds space below the image section */
+    padding-bottom: 20px; /* Adds space below without shrinking the image */
 }
 
 .search-background-home h1 {
