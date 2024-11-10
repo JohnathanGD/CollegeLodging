@@ -16,7 +16,7 @@
     display: flex;
     justify-content: center;
     height: auto;
-    gap: 10px;
+    gap: 90px;
 }
 
 /* Footer styles */
@@ -83,6 +83,7 @@
 .content-block {
     text-align: center;
     padding: 20px;
+    margin-top: 100px; /* Adds space above this section */
     background-color: #CEB888;
     border-radius: 10px;
     Margin: 20px;
@@ -181,6 +182,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 400px; /* Same as the minimum height of the background */
     height: 30vh; /* Take up 50% of the viewport height */
     width: 100%; /* Full width of the screen */
 }
@@ -190,14 +192,18 @@
     background-size: cover;
     background-position: center;
     position: absolute;
-    width: 100%; /* Stretch horizontally across the screen */
+    width: 100%; 
+    height: calc(50vh - 100px); /* Adjusted height to avoid covering the header */
     padding: 100px;
+    min-height: 400px; /* Set a minimum height to prevent it from shrinking */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(100px); /* Apply blur effect */
+    margin-bottom: 80px; /* Adds space below the image section */
+    padding-bottom: 20px; /* Adds space below without shrinking the image */
 }
 
 .search-background-home h1 {
@@ -253,6 +259,8 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 15px;
+    position: relative;
+    z-index: 1; /* Ensure header stays on top */
 }
 
 header .logo {
