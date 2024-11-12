@@ -30,7 +30,14 @@ def setup_db():
 
             cursor.execute(queries.CREATE_DATABASE.format(db_name))
             cursor.execute(queries.USE_DATABASE.format(db_name))
+
             cursor.execute(queries.CREATE_USERS_TABLE)
+            cursor.execute(queries.CREATE_ROLES_TABLE)
+            cursor.execute(queries.CREATE_USER_ROLES_TABLE)
+
+            cursor.execute(queries.CREATE_LISTINGS_TABLE)
+            cursor.execute(queries.CREATE_LISTING_IMAGES_TABLE)
+
             db_connection.commit()
 
             print(f"Database {db_name} created successfully.")

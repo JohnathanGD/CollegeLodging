@@ -13,9 +13,23 @@ CREATE_USERS_TABLE = '''CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL,
     firstname VARCHAR(255) NOT NULL,
     lastname VARCHAR(255) NOT NULL,
-    user_type VARCHAR(255) DEFAULT 'user',
     is_admin BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);'''
+
+CREATE_ROLES_TABLE = '''CREATE TABLE IF NOT EXISTS roles (
+    id SERIAL PRIMARY KEY,
+    role_name VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);'''
+
+CREATE_USER_ROLES_TABLE  = '''CREATE TABLE IF NOT EXISTS user_roles (
+    user_id BIGINT UNSIGNED NOT NULL,
+    role_id BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, role_id)
 );'''
 
 CREATE_LISTINGS_TABLE = '''CREATE TABLE IF NOT EXISTS listings (
@@ -35,20 +49,24 @@ CREATE_LISTINGS_TABLE = '''CREATE TABLE IF NOT EXISTS listings (
     pets_allowed BOOLEAN DEFAULT FALSE,
     utilities_included BOOLEAN DEFAULT FALSE,
     type VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_by INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE
 );'''
 
-CREATE_APARTMENT_IMAGES_TABLE = '''CREATE TABLE IF NOT EXISTS apartment_images (
+CREATE_LISTING_IMAGES_TABLE = '''CREATE TABLE IF NOT EXISTS listing_images (
     id SERIAL PRIMARY KEY,
-    apartment_id FOREIGN KEY (id) REFERENCES listings (id) ON DELETE CASCADE,
+    listing_id BIGINT UNSIGNED NOT NULL,
     image_url TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (apartment_id) REFERENCES apartments (id)
+    FOREIGN KEY (listing_id) REFERENCES listings (id) ON DELETE CASCADE
 );'''
 
+RENAME_COLUMN_IN_TABLE = "ALTER TABLE %s RENAME COLUMN %s TO %s;"
 ADD_COLUMN_INTO_TABLE = "ALTER TABLE %s ADD COLUMN %s %s;"
 GET_COLUMNS = "SHOW COLUMNS FROM %s;"
 UPDATE_COLUMN_IN_TABLE = "ALTER TABLE %s MODIFY COLUMN %s %s;"
+UPDATE_COLUMN_IN_TABLE_WITH_DEFAULT = "ALTER TABLE %s MODIFY COLUMN %s %s DEFAULT %s;"
 DROP_COLUMN_FROM_TABLE = "ALTER TABLE %s DROP COLUMN %s;"
 
 ADD_KEY_INTO_TABLE = "ALTER TABLE %s ADD %s %s;"
@@ -68,21 +86,20 @@ GET_USER_BY_USERNAME = "SELECT * FROM users WHERE username = %s;"
 INSERT_NEW_USER = '''INSERT INTO users (email, password, firstname, lastname) 
 VALUES (%s, %s, %s, %s);'''
 
-INSERT_NEW_USER_WITH_USER_TYPE = '''INSERT INTO users (email, password, firstname, lastname, user_type)
-VALUES (%s, %s, %s, %s, %s);'''
-
 INSERT_NEW_USER_WITH_IS_ADMIN = '''INSERT INTO users (email, password, firstname, lastname, is_admin)
 VALUES (%s, %s, %s, %s, %s);'''
-
-INSERT_NEW_USER_WITH_USER_TYPE_AND_IS_ADMIN = '''INSERT INTO users (email, password, firstname, lastname, user_type, is_admin)
-VALUES (%s, %s, %s, %s, %s, %s);'''
 
 UPDATE_USER_PASSWORD = "UPDATE users SET password = %s WHERE id = %s;"
 UPDATE_USER_EMAIL = "UPDATE users SET email = %s WHERE id = %s;"
 UPDATE_USER_FIRSTNAME = "UPDATE users SET firstname = %s WHERE id = %s;"
 UPDATE_USER_LASTNAME = "UPDATE users SET lastname = %s WHERE id = %s;"
-UPDATE_USER_USER_TYPE = "UPDATE users SET user_type = %s WHERE id = %s;"
-UPDATE_USER_IS_ADMIN = "UPDATE users SET is_admin = %s WHERE id = %s;"
+UPDATE_USER_IS_ADMIN_STATUS = "UPDATE users SET is_admin = %s WHERE id = %s;"
+
+ADD_USER_ROLE = "INSERT INTO user_roles (user_id, role_id) VALUES (%s, %s);"
+REMOVE_USER_ROLE = "DELETE FROM user_roles WHERE user_id = %s AND role_id = %s;"
+GET_USER_ROLES = "SELECT * FROM user_roles WHERE user_id = %s;"
+GET_USER_ROLE = "SELECT * FROM user_roles WHERE user_id = %s AND role_id = %s;"
+GET_USER_ROLE_BY_NAME = "SELECT * FROM user_roles WHERE user_id = %s AND role_id = (SELECT id FROM roles WHERE role_name = %s);"
 
 DELETE_USER = "DELETE FROM users WHERE id = %s;"
 
@@ -96,15 +113,15 @@ INSERT_NEW_LISTING = '''INSERT INTO listings (title, description, street_address
 UPDATE_LISTING = "UPDATE listings SET %s = %s WHERE id = %s;"
 DELETE_LISTING = "DELETE FROM listings WHERE id = %s;"
 
-# Apartment Image Queries
-GET_APARTMENT_IMAGE_BY_ID = "SELECT * FROM apartment_images WHERE id = %s;"
-GET_APARTMENT_IMAGES = "SELECT * FROM apartment_images;"
-GET_APARTMENT_IMAGES_BY_KEY = "SELECT * FROM apartment_images WHERE %s = %s;"
-GET_APARTMENT_IMAGES_BY_APARTMENT_ID = "SELECT * FROM apartment_images WHERE apartment_id = %s;"
-INSERT_NEW_APARTMENT_IMAGE = '''INSERT INTO apartment_images (apartment_id, image_url);'''
-UPDATE_APARTMENT_IMAGE = "UPDATE apartment_images SET %s = %s WHERE id = %s;"
-DELETE_APARTMENT_IMAGE = "DELETE FROM apartment_images WHERE id = %s;"
-DELETE_APARTMENT_IMAGES_BY_APARTMENT_ID = "DELETE FROM apartment_images WHERE apartment_id = %s;"
+# Listing Image Queries
+GET_LISTING_IMAGE_BY_ID = "SELECT * FROM listing_images WHERE id = %s;"
+GET_LISTING_IMAGES = "SELECT * FROM listing_images;"
+GET_LISTING_IMAGES_BY_KEY = "SELECT * FROM listing_images WHERE %s = %s;"
+GET_LISTING_IMAGES_BY_LISTING_ID = "SELECT * FROM listing_images WHERE listing_id = %s;"
+INSERT_NEW_LISTING_IMAGE = "INSERT INTO listing_images (listing_id, image_url);"
+UPDATE_LISTING_IMAGE = "UPDATE listing_images SET %s = %s WHERE id = %s;"
+DELETE_LISTING_IMAGE = "DELETE FROM listing_images WHERE id = %s;"
+DELETE_LISTING_IMAGES_BY_LISTING_ID = "DELETE FROM listing_images WHERE listing_id = %s;"
 
 # Query Operations
 def execute_query(query, params=None, dictionary=False):
