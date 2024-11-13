@@ -50,11 +50,18 @@ class User(UserMixin):
 
     def get_roles(self): # Get user roles
         params = (self.id,)
-        roles = queries.execute_query_with_results(queries.GET_USER_ROLES, params, dictionary=True)
+        roles = queries.execute_query_with_results(queries.GET_USER_ROLES_NAMES, params, dictionary=True)
+
         if roles:
             self.roles = roles
         return self.roles
     
+    def get_roles_list(self):
+        if not self.roles:
+            self.get_roles()
+            
+        return [role['role_name'] for role in self.roles]
+
     def add_role(self, role_id): # Add user role
         params = (self.id, role_id)
         queries.execute_query(queries.ADD_USER_ROLE, params)
@@ -68,7 +75,6 @@ class User(UserMixin):
     def is_admin(self): # Check if user is admin
         return self.is_admin
     
-
     def set_password(self, password): # Set password
         self.password_hash = generate_password_hash(password)
 

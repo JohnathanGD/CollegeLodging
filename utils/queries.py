@@ -117,6 +117,14 @@ ADD_USER_ROLE_BY_NAME = "INSERT INTO user_roles (user_id, role_id) VALUES (%s, (
 REMOVE_USER_ROLE = "DELETE FROM user_roles WHERE user_id = %s AND role_id = %s;"
 REMOVE_USER_ROLE_BY_NAME = "DELETE FROM user_roles WHERE user_id = %s AND role_id = (SELECT id FROM roles WHERE role_name = %s);"
 GET_USER_ROLES = "SELECT * FROM user_roles WHERE user_id = %s;"
+
+GET_USER_ROLES_NAMES = '''
+SELECT roles.role_name, roles.id
+FROM roles
+JOIN user_roles ON roles.id = user_roles.role_id
+WHERE user_roles.user_id = %s;
+'''
+
 GET_USER_ROLE = "SELECT * FROM user_roles WHERE user_id = %s AND role_id = %s;"
 GET_USER_ROLE_BY_NAME = "SELECT * FROM user_roles WHERE user_id = %s AND role_id = (SELECT id FROM roles WHERE role_name = %s);"
 
