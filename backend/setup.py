@@ -35,6 +35,11 @@ def setup_db():
             cursor.execute(queries.CREATE_ROLES_TABLE)
             cursor.execute(queries.CREATE_USER_ROLES_TABLE)
 
+            roles = ['admin', 'user']
+
+            for role in roles:
+                cursor.execute(queries.INSERT_NEW_ROLE, (role, role))
+
             cursor.execute(queries.CREATE_LISTINGS_TABLE)
             cursor.execute(queries.CREATE_LISTING_IMAGES_TABLE)
 

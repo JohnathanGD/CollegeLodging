@@ -79,6 +79,7 @@ UPDATE_TABLE = "ALTER TABLE %s RENAME TO %s;"
 DELETE_TABLE = "DROP TABLE %s;"
 
 # User Queries
+GET_USERS = "SELECT * FROM users;"
 GET_USER_BY_ID = "SELECT * FROM users WHERE id = %s;"
 GET_USER_BY_EMAIL = "SELECT * FROM users WHERE email = %s;"
 GET_USER_BY_USERNAME = "SELECT * FROM users WHERE username = %s;"
@@ -95,8 +96,26 @@ UPDATE_USER_FIRSTNAME = "UPDATE users SET firstname = %s WHERE id = %s;"
 UPDATE_USER_LASTNAME = "UPDATE users SET lastname = %s WHERE id = %s;"
 UPDATE_USER_IS_ADMIN_STATUS = "UPDATE users SET is_admin = %s WHERE id = %s;"
 
+
+# Role Queries
+GET_ROLES = "SELECT * FROM roles;"
+GET_ROLE_BY_ID = "SELECT * FROM roles WHERE id = %s;"
+GET_ROLE_BY_NAME = "SELECT * FROM roles WHERE role_name = %s;"
+GET_ROLE_BY_USER_ID = "SELECT * FROM roles WHERE id = (SELECT role_id FROM user_roles WHERE user_id = %s);"
+
+
+INSERT_NEW_ROLE = "INSERT INTO roles (role_name) SELECT %s WHERE NOT EXISTS (SELECT 1 FROM roles WHERE role_name = %s);"
+UPDATE_ROLE = "UPDATE roles SET %s = %s WHERE id = %s;"
+UPDATE_ROLE_NAME = "UPDATE roles SET role_name = %s WHERE id = %s;"
+DELETE_ROLE = "DELETE FROM roles WHERE id = %s;"
+DELETE_ROLE_BY_NAME = "DELETE FROM roles WHERE role_name = %s;"
+DELETE_ROLE_BY_USER_ID = "DELETE FROM roles WHERE id = (SELECT role_id FROM user_roles WHERE user_id = %s);"
+
+# User Role Queries
 ADD_USER_ROLE = "INSERT INTO user_roles (user_id, role_id) VALUES (%s, %s);"
+ADD_USER_ROLE_BY_NAME = "INSERT INTO user_roles (user_id, role_id) VALUES (%s, (SELECT id FROM roles WHERE role_name = %s));"
 REMOVE_USER_ROLE = "DELETE FROM user_roles WHERE user_id = %s AND role_id = %s;"
+REMOVE_USER_ROLE_BY_NAME = "DELETE FROM user_roles WHERE user_id = %s AND role_id = (SELECT id FROM roles WHERE role_name = %s);"
 GET_USER_ROLES = "SELECT * FROM user_roles WHERE user_id = %s;"
 GET_USER_ROLE = "SELECT * FROM user_roles WHERE user_id = %s AND role_id = %s;"
 GET_USER_ROLE_BY_NAME = "SELECT * FROM user_roles WHERE user_id = %s AND role_id = (SELECT id FROM roles WHERE role_name = %s);"
