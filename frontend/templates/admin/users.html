@@ -1,0 +1,48 @@
+{% extends 'admin/sidebar.html' %}
+
+{% block title %}Users{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='database.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css">
+{% endblock %}
+
+{% block content %}
+    <div class="table-wrapper">
+        <div class="user-table-container">
+            <table class="user-table table">
+                <thead class="user-table-header table-header">
+                    <tr>
+                        <th><input type="checkbox" name="select-all" />&nbsp;</th>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email Address</th>
+                        <th>User Roles</th>
+                        <th>Date Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                {% for user in users %}
+                    <tr>
+                        <td><input type="checkbox" name="select" />&nbsp;</td>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.firstname }}</td>
+                        <td>{{ user.lastname }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.roles }}</td>
+                        <td class="created-by column">{{ user.created_at }}</td>
+                        <td class="action-buttons">
+                            <button class="edit-button icon">
+                                <i class="bx bxs-edit-alt"></i>
+                            </button>
+                            <button class="delete-button icon">
+                                <i class="bx bxs-trash-alt"></i>
+                            </button>
+                        </td>              
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,146 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+:root {
+    --body-color: #efefef;
+    --sidebar-color: #353535;
+    --primary-color: #FFFFFF;
+    --primary-color-light: #F6F5FF;
+    --secondary-color: #D9D9D9;
+    --white-color: #FFFFFF;
+    --blue-color: #38B6FF;
+    --red-color: #FF5757;
+    --yellow-color: #FFDE59;
+    --green-color: #03CEA4;
+    --purple-color: #6F42C1;
+    --dark-color: #1E1E1E;
+    --grey-color: #898989;
+    --dark-grey-color: #333;
+    --toggle-color: #DDD;
+
+    --tran-02: all 0.2s ease;
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.4s ease;
+    --tran-05: all 0.5s ease;
+
+    --primary-font: "Archivo Black", sans-serif;
+    --primary-font-weight: 400;
+    --primary-font-style: normal;
+    --primary-font-size: 16px;
+}
+
+::selection {
+    background-color: var(--blue-color);
+    color: var(--white-color);
+}
+
+/* Table Container */
+.user-table-container {
+    padding: 20px;
+    background-color: var(--body-color);
+    border-radius: 10px;
+}
+
+/* Table */
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    overflow-x: scroll;
+    border-radius: 10px;
+}
+
+.user-table-header th {
+    position: sticky;
+    top: 0;
+    font-size: 14px;
+    background-color: var(--primary-color);
+    color: var(--grey-color);
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid var(--secondary-color);
+}
+
+.user-table-header th:first-child,
+.user-table- td:first-child {
+    border-top-left-radius: 10px;
+}
+
+.user-table-header th:last-child,
+.user-table- td:last-child {
+    border-top-right-radius: 10px;
+}
+
+.user-table th, .user-table td {
+    padding: 10px;
+    border-bottom: 1px solid #D3D6DA;
+    word-break: break-all;
+    text-align: center;
+}
+
+.user-table tr:hover {
+    background-color: var(--white-color);
+}
+
+/* Table Wrapper */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+/* Action Buttons */
+.action-button {
+    display: flex;
+    justify-content: censter;
+    align-items: center;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 0 5px;
+    padding: 0;
+}
+
+.edit-button {
+    background-color: var(--yellow-color);
+}
+
+.delete-button {
+    background-color: var(--red-color);
+}
+
+.created-by {
+    color: var(--grey-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .user-table-header th {
+        font-size: 14px;
+    }
+
+    .user-table th, .user-table td {
+        padding: 5px;
+    }
+
+    .icon {
+        width: 25px;
+        height: 25px;
+        font-size: 14px;
+    }
+}
