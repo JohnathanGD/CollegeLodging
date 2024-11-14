@@ -40,6 +40,7 @@ def signup():
         
     return render_template('admin/admin_signup.html')
 
+
 @admin_bp.route('/dashboard')
 @login_required
 @admin_only
@@ -85,3 +86,21 @@ def users():
         user['created_at'] = user['created_at'].strftime('%B %d, %Y %I:%M %p')
 
     return render_template('admin/users.html', users=users, total_pages=total_pages, current_page=page)
+
+@admin_bp.route('/properties')
+@login_required
+@admin_only
+def properties():
+    listings = get_listings()  # Use existing function for listings
+    
+    for listing in listings:
+        listing['created_at'] = listing['created_at'].strftime('%B %d, %Y %I:%M %p')
+
+    return render_template('admin/properties.html', listings=listings)
+
+@cache.cached(timeout=60)
+def get_listings():
+    # Execute the GET_LISTINGS query
+    properties = queries.execute_query_with_results(queries.GET_LISTINGS, dictionary=True)
+    
+    return properties

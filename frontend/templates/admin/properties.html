@@ -1,0 +1,75 @@
+{% extends 'admin/sidebar.html' %}
+
+{% block title %}Properties{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='database.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css">
+{% endblock %}
+
+{% block dashboard_header %}
+    Properties
+{% endblock %}
+
+{% block content %}
+    <div class="header-container">
+        <!-- Add Property Button positioned to the right -->
+        <a href="#">
+            <button class="add-property-button">Add Property</button>
+        </a>
+    </div>
+
+    <div class="table-wrapper">
+        <div class="property-table-container">
+            <table class="property-table table">
+                <thead class="property-table-header table-header">
+                    <tr>
+                        <th><input type="checkbox" name="select-all" onclick="toggleSelectAll(this)"/></th>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Price</th>
+                        <th>Bedrooms</th>
+                        <th>Bathrooms</th>
+                        <th>Furnished</th>
+                        <th>Pets Allowed</th>
+                        <th>Utilities Included</th>
+                        <th>Available</th> <!-- New column added -->
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for listing in listings %}
+                        <tr>
+                            <td><input type="checkbox" name="select-checkbox" class="select-checkbox"/></td>
+                            <td>{{ listing.id }}</td>
+                            <td>{{ listing.title }}</td>
+                            <td>{{ listing.description }}</td>
+                            <td>{{ listing.street_address }}, {{ listing.city }}, {{ listing.state }} {{ listing.postal_code }}, {{ listing.country }}</td>
+                            <td>${{ listing.price }}</td>
+                            <td>{{ listing.bedroom_count }}</td>
+                            <td>{{ listing.bathroom_count }}</td>
+                            <td>{{ 'Yes' if listing.furnished else 'No' }}</td>
+                            <td>{{ 'Yes' if listing.pets_allowed else 'No' }}</td>
+                            <td>{{ 'Yes' if listing.utilities_included else 'No' }}</td>
+                            <td>{{ 'Yes' if listing.is_available else 'No' }}</td>
+                            <td class="action-buttons">
+                                <button class="edit-button icon">
+                                    <i class="bx bxs-edit-alt"></i>
+                                </button>
+                                <button class="delete-button icon">
+                                    <i class="bx bxs-trash-alt"></i>
+                                </button>
+                            </td>              
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% block js %}
+    <script src="{{ url_for('static', filename='scripts/database.js') }}"></script>
+{% endblock %}
+{% endblock %}
