@@ -33,7 +33,12 @@
                         <td>{{ user.firstname }}</td>
                         <td>{{ user.lastname }}</td>
                         <td>{{ user.email }}</td>
-                        <td>{{ user.roles }}</td>
+                        <td>
+                            {% set roles = user.roles.split(',') %}
+                            {% for role in roles[:3] %}
+                                <span class="role-label {{ role | lower }}">{{ role }}</span>
+                            {% endfor %}
+                        </td>
                         <td class="created-by column">{{ user.created_at }}</td>
                         <td class="action-buttons">
                             <button class="edit-button icon">
