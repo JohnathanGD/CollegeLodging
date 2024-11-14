@@ -7,13 +7,16 @@
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css">
 {% endblock %}
 
+{% block dashboard_header %}Users{% endblock %}
+
 {% block content %}
     <div class="table-wrapper">
         <div class="user-table-container">
             <table class="user-table table">
                 <thead class="user-table-header table-header">
                     <tr>
-                        <th><input type="checkbox" name="select-all" />&nbsp;</th>
+                        <th><input type="checkbox" name="select-all" 
+                            onclick="toggleSelectAll(this)"/></th>
                         <th>ID</th>
                         <th>First Name</th>
                         <th>Last Name</th>
@@ -25,7 +28,7 @@
                 </thead>
                 {% for user in users %}
                     <tr>
-                        <td><input type="checkbox" name="select" />&nbsp;</td>
+                        <td><input type="checkbox" name="select-checkbox" class="select-checkbox"/></td>
                         <td>{{ user.id }}</td>
                         <td>{{ user.firstname }}</td>
                         <td>{{ user.lastname }}</td>
@@ -45,4 +48,9 @@
             </table>
         </div>
     </div>
+
+    {% block js %}
+        <script src="{{ url_for('static', filename='scripts/database.js') }}"></script>
+    {% endblock %}
+
 {% endblock %}
