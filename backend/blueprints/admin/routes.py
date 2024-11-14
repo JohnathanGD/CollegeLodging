@@ -9,6 +9,7 @@ from backend import cache
 from datetime import datetime
 
 admin_bp = Blueprint('admin', __name__)
+PAGINATION_LIMIT = 10
 
 @admin_bp.route('/signup', methods=['GET', 'POST'])
 @unauthenticated_user
@@ -51,19 +52,36 @@ def dashboard():
 def database():
     return render_template('admin/database.html')
 
-@cache.cached(timeout=60)
-def get_users():
-    users = queries.execute_query_with_results(queries.GET_USERS_WITH_ROLES, dictionary=True)
-
-    return users
-
 @admin_bp.route('/users')
 @login_required
 @admin_only
 def users():
-    users = get_users()
+    def get_users(pagination=True, per_page=PAGINATION_LIMIT, page=1):
+        if pagination:
+            offset = (page - 1) * per_page
+            params = (per_page, offset)
+            return queries.execute_query_with_results(queries.GET_USERS_WITH_PAGINATION, params=params, dictionary=True)
+
+        return queries.execute_query_with_results(queries.GET_USERS_WITH_ROLES, dictionary=True)
+
+    def get_user_count():
+        count = int(queries.execute_query_with_results(queries.GET_TOTAL_USERS, fetch_one=True, dictionary=True)['COUNT(*)'])
+        print(count, type(count))
+
+        return count
+
+    page = request.args.get('page', 1, type=int)
+
+    total_users = get_user_count()
+    total_pages = (total_users + PAGINATION_LIMIT - 1) // PAGINATION_LIMIT
+
+    cache_key = f'users_page_{page}'
+    users = cache.get(cache_key)
+    if users is None:
+        users = get_users(page=page)
+        cache.set(cache_key, users, timeout=60)
 
     for user in users:
         user['created_at'] = user['created_at'].strftime('%B %d, %Y %I:%M %p')
 
-    return render_template('admin/users.html', users=users)
+    return render_template('admin/users.html', users=users, total_pages=total_pages, current_page=page)
