@@ -253,9 +253,9 @@
 
 .header-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-    padding: 10px 0;
+    padding-right: 35px;
 }
 
 .add-property-button {
