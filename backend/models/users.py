@@ -2,9 +2,10 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from backend.db import get_db_connection
 import utils.queries as queries
+from datetime import datetime
 
 class User(UserMixin):
-    def __init__(self, id, email, firstname, lastname, password_hash, is_admin=False, roles=[]):
+    def __init__(self, id, email, firstname, lastname, password_hash, is_admin=False, roles=[], created_at=None):
         self.id = id
         self.email = email
         self.firstname = firstname
@@ -12,6 +13,7 @@ class User(UserMixin):
         self.password_hash = password_hash  
         self.is_admin = is_admin
         self.roles = []
+        self.created_at = created_at
     
     @staticmethod
     def get_by_id(user_id): # Get user by ID
@@ -25,6 +27,7 @@ class User(UserMixin):
                 lastname=user_data['lastname'],
                 password_hash=user_data['password'],
                 is_admin=user_data['is_admin'],
+                created_at=user_data['created_at']
             )
 
             user.roles = user.get_roles()
@@ -44,6 +47,7 @@ class User(UserMixin):
                 lastname=user_data['lastname'],
                 password_hash=user_data['password'],
                 is_admin=user_data['is_admin'],
+                created_at=user_data['created_at']
             )
             
         return None
@@ -59,7 +63,7 @@ class User(UserMixin):
     def get_roles_list(self):
         if not self.roles:
             self.get_roles()
-            
+
         return [role['role_name'] for role in self.roles]
 
     def add_role(self, role_id): # Add user role
@@ -80,3 +84,4 @@ class User(UserMixin):
 
     def check_password(self, password): # Check password
         return check_password_hash(self.password_hash, password)
+    

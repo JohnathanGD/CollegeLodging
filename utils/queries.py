@@ -83,6 +83,13 @@ GET_USERS = "SELECT * FROM users;"
 GET_USER_BY_ID = "SELECT * FROM users WHERE id = %s;"
 GET_USER_BY_EMAIL = "SELECT * FROM users WHERE email = %s;"
 GET_USER_BY_USERNAME = "SELECT * FROM users WHERE username = %s;"
+GET_USERS_WITH_ROLES = '''
+SELECT users.id, users.firstname, users.lastname, users.email, GROUP_CONCAT(roles.role_name) as roles, users.is_admin, users.created_at
+FROM users
+LEFT JOIN user_roles ON users.id = user_roles.user_id
+LEFT JOIN roles ON user_roles.role_id = roles.id
+GROUP BY users.id;
+'''
 
 INSERT_NEW_USER = '''INSERT INTO users (email, password, firstname, lastname) 
 VALUES (%s, %s, %s, %s);'''
@@ -102,7 +109,6 @@ GET_ROLES = "SELECT * FROM roles;"
 GET_ROLE_BY_ID = "SELECT * FROM roles WHERE id = %s;"
 GET_ROLE_BY_NAME = "SELECT * FROM roles WHERE role_name = %s;"
 GET_ROLE_BY_USER_ID = "SELECT * FROM roles WHERE id = (SELECT role_id FROM user_roles WHERE user_id = %s);"
-
 
 INSERT_NEW_ROLE = "INSERT INTO roles (role_name) SELECT %s WHERE NOT EXISTS (SELECT 1 FROM roles WHERE role_name = %s);"
 UPDATE_ROLE = "UPDATE roles SET %s = %s WHERE id = %s;"

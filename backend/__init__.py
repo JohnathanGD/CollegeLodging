@@ -2,9 +2,11 @@ from flask import Flask, current_app as app
 from flask_login import LoginManager
 from .config import Config
 from .models.users import User
+from flask_caching import Cache
 
 # Initialize the Flask application
 login_manager = LoginManager()
+cache = Cache(config={'CACHE_TYPE': 'simple'})
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -21,6 +23,9 @@ def create_app(config_class=Config):
 
     # Initialize the login manager
     login_manager.init_app(app)
+
+    # Initialize the cache
+    cache.init_app(app)
 
     # Register the blueprints
     from .blueprints.main.routes import main_bp as main

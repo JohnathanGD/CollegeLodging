@@ -5,6 +5,8 @@ from werkzeug.security import generate_password_hash
 from backend.db import get_db_connection
 import utils.queries as queries
 from utils.decorators import unauthenticated_user, login_required, admin_only
+from backend import cache
+from datetime import datetime
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -42,3 +44,26 @@ def signup():
 @admin_only
 def dashboard():
     return render_template('admin/admin_dashboard.html')
+
+@admin_bp.route('/database')
+@login_required
+@admin_only
+def database():
+    return render_template('admin/database.html')
+
+@cache.cached(timeout=60)
+def get_users():
+    users = queries.execute_query_with_results(queries.GET_USERS_WITH_ROLES, dictionary=True)
+
+    return users
+
+@admin_bp.route('/users')
+@login_required
+@admin_only
+def users():
+    users = get_users()
+
+    for user in users:
+        user['created_at'] = user['created_at'].strftime('%B %d, %Y %I:%M %p')
+
+    return render_template('admin/users.html', users=users)
