@@ -48,6 +48,11 @@
     background-color: var(--body-color);
     border-radius: 10px;
 }
+.property-table-container {
+    padding: 20px;
+    background-color: var(--body-color);
+    border-radius: 10px;
+}
 
 /* Table */
 .user-table {
@@ -93,6 +98,76 @@
     background-color: var(--white-color);
 }
 
+.property-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    min-width: var(--min-table-width);
+    max-width: 100%;
+    table-layout: auto;
+}
+
+.property-table-header th:first-child,
+.property-table td:first-child {
+    border-top-left-radius: 10px;
+}
+
+.property-table-header th:last-child,
+.property-table td:last-child {
+    border-top-right-radius: 10px;
+}
+
+.property-table tr:last-child {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Small shadow under the last row */
+}
+
+.property-table td:nth-child(4), 
+.property-table th:nth-child(4) { 
+    padding-left: 40px; 
+}
+
+.property-table td:nth-child(5), 
+.property-table th:nth-child(5) { 
+    padding-left: 40px; 
+}
+
+.property-table td:nth-child(6), 
+.property-table th:nth-child(6) { 
+    padding-left: 40px; 
+}
+
+.property-table td:nth-child(13), 
+.property-table th:nth-child(13) { 
+    min-width: 100px;
+}
+
+.property-table td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    border-bottom: 1px solid #D3D6DA;
+    
+}
+.property-table th {
+    background-color: #fff;
+    color: var(--grey-color);
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    border-bottom: 1px solid #D3D6DA;
+}
+
+
+.property-table tr:hover {
+    background-color: var(--white-color);
+}
+
+
 /* Table Wrapper */
 .table-wrapper {
     width: 100%;
@@ -100,6 +175,10 @@
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 0 16px;
+}
+.table-scroll-wrapper {
+    width: 100%;
+    overflow-x: auto;
 }
 
 /* Action Buttons */
@@ -138,6 +217,7 @@
     color: var(--grey-color);
 }
 
+
 /* Responsive */
 @media (max-width: var(--min-screen-width)) {
     .table-wrapper {
@@ -170,4 +250,34 @@
 .role-label.user {
     color: var(--blue-color); 
     background-color: rgba(56, 182, 255, 0.2);
+}
+
+.property-type-label.apartment {
+    color: var(--orange-color);
+    background-color: rgba(255, 140, 41, 0.2);
+}
+
+.property-type-label.house {
+    color: var(--blue-color); 
+    background-color: rgba(56, 182, 255, 0.2);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.add-property-button {
+    padding: 8px 12px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-property-button:hover {
+    background-color: #0056b3;
 }
