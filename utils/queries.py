@@ -49,7 +49,7 @@ CREATE_LISTINGS_TABLE = '''CREATE TABLE IF NOT EXISTS listings (
     pets_allowed BOOLEAN DEFAULT FALSE,
     utilities_included BOOLEAN DEFAULT FALSE,
     type VARCHAR(255) NOT NULL,
-    created_by INT NOT NULL,
+    created_by BIGINT UNSIGNED NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (created_by) REFERENCES users (id) ON DELETE CASCADE
 );'''
@@ -90,6 +90,16 @@ LEFT JOIN user_roles ON users.id = user_roles.user_id
 LEFT JOIN roles ON user_roles.role_id = roles.id
 GROUP BY users.id;
 '''
+GET_TOTAL_USERS = "SELECT COUNT(*) FROM users;"
+
+GET_USERS_WITH_PAGINATION = '''
+SELECT users.id, users.firstname, users.lastname, users.email, GROUP_CONCAT(roles.role_name) as roles, users.created_at
+FROM users
+LEFT JOIN user_roles ON users.id = user_roles.user_id
+LEFT JOIN roles ON user_roles.role_id = roles.id
+GROUP BY users.id
+LIMIT %s OFFSET %s;
+'''
 
 INSERT_NEW_USER = '''INSERT INTO users (email, password, firstname, lastname) 
 VALUES (%s, %s, %s, %s);'''
@@ -102,7 +112,6 @@ UPDATE_USER_EMAIL = "UPDATE users SET email = %s WHERE id = %s;"
 UPDATE_USER_FIRSTNAME = "UPDATE users SET firstname = %s WHERE id = %s;"
 UPDATE_USER_LASTNAME = "UPDATE users SET lastname = %s WHERE id = %s;"
 UPDATE_USER_IS_ADMIN_STATUS = "UPDATE users SET is_admin = %s WHERE id = %s;"
-
 
 # Role Queries
 GET_ROLES = "SELECT * FROM roles;"
@@ -141,7 +150,8 @@ GET_LISTING_BY_ID = "SELECT * FROM listings WHERE id = %s;"
 GET_LISTINGS = "SELECT * FROM listings;"
 GET_LISTINGS_BY_KEY = "SELECT * FROM listings WHERE %s = %s;"
 
-INSERT_NEW_LISTING = '''INSERT INTO listings (title, description, street_address, city, state, postal_code, country, price, bedroom_count, bathroom_count, furnished, pets_allowed, utilities_included, type);'''
+INSERT_NEW_LISTING = '''INSERT INTO listings (title, description, street_address, city, state, postal_code, country, price, bedroom_count, bathroom_count, furnished, pets_allowed, utilities_included, type)
+VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'''
 
 UPDATE_LISTING = "UPDATE listings SET %s = %s WHERE id = %s;"
 DELETE_LISTING = "DELETE FROM listings WHERE id = %s;"
