@@ -103,6 +103,7 @@
     border-collapse: collapse;
     border-spacing: 0;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
     min-width: var(--min-table-width);
     max-width: 100%;
     table-layout: auto;
@@ -118,9 +119,6 @@
     border-top-right-radius: 10px;
 }
 
-.property-table tr:last-child {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Small shadow under the last row */
-}
 
 .property-table td:nth-child(4), 
 .property-table th:nth-child(4) { 
@@ -148,6 +146,7 @@
     text-align: center;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    max-height: 100px;
     border-bottom: 1px solid #D3D6DA;
     
 }
@@ -248,16 +247,6 @@
 }
 
 .role-label.user {
-    color: var(--blue-color); 
-    background-color: rgba(56, 182, 255, 0.2);
-}
-
-.property-type-label.apartment {
-    color: var(--orange-color);
-    background-color: rgba(255, 140, 41, 0.2);
-}
-
-.property-type-label.house {
     color: var(--blue-color); 
     background-color: rgba(56, 182, 255, 0.2);
 }
