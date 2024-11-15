@@ -553,3 +553,6 @@ main {
 
 .apartments-list p {
     text-align: center;
+    font-style: italic;
+    color: #999;
+}
