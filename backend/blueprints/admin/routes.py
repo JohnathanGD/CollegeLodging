@@ -100,9 +100,7 @@ def users():
 @admin_only
 def get_user(user_id):
     user = User.get_by_id(user_id)
-    print(user)
     if user:
-        print("User found.")
         return jsonify({
             'id': user.id,
             'firstname': user.firstname,
@@ -111,8 +109,29 @@ def get_user(user_id):
             'roles': user.roles,
             'created_at': user.created_at
         })
-    print('User not found.')
     return jsonify({'error': 'User not found'}), 404
+
+@admin_bp.route('/delete_user/<int:user_id>', methods=['DELETE'])
+@login_required
+@admin_only
+def delete_user(user_id):
+    if user_id == current_user.id:
+        return jsonify({
+            'success': False,
+            'error': 'You cannot delete yourself.',
+        }), 400
+    
+    if queries.execute_query(queries.DELETE_USER_BY_ID, (user_id,)):
+        return jsonify({
+            'success': True,
+            'message': 'User deleted successfully.'
+        }), 200
+    
+    return jsonify({
+        'success': False,
+        'error': 'An error occurred while deleting the user.'
+    }), 500
+
 
 @admin_bp.route('/properties')
 @login_required

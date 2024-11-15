@@ -115,6 +115,8 @@ UPDATE_USER_FIRSTNAME = "UPDATE users SET firstname = %s WHERE id = %s;"
 UPDATE_USER_LASTNAME = "UPDATE users SET lastname = %s WHERE id = %s;"
 UPDATE_USER_IS_ADMIN_STATUS = "UPDATE users SET is_admin = %s WHERE id = %s;"
 
+DELETE_USER_BY_ID = "DELETE FROM users WHERE id = %s;"
+
 # Role Queries
 GET_ROLES = "SELECT * FROM roles;"
 GET_ROLE_BY_ID = "SELECT * FROM roles WHERE id = %s;"

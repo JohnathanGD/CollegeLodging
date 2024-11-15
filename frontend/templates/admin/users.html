@@ -27,7 +27,7 @@
                     </tr>
                 </thead>
                 {% for user in users %}
-                    <tr>
+                    <tr id="user-row-{{ user.id }}">
                         <td><input type="checkbox" name="select-checkbox" class="select-checkbox"/></td>
                         <td>{{ user.id }}</td>
                         <td>{{ user.firstname }}</td>
@@ -45,7 +45,7 @@
                             <button class="edit-button icon" onclick="openEditModal('{{ user.id }}')">
                                 <i class="bx bxs-edit-alt"></i>
                             </button>
-                            <button class="delete-button icon">
+                            <button class="delete-button icon" onclick="deleteUser('{{ user.id }}')">
                                 <i class="bx bxs-trash-alt"></i>
                             </button>
                         </td>              

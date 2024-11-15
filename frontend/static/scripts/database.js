@@ -55,7 +55,6 @@ function hideAllModalContent() {
 
 const openEditModal = (id) => { 
     const url = `get_user/${id}`;
-    console.log("Fetching user data from URL:", url);
 
     fetch(url)
         .then(response => {
@@ -65,8 +64,6 @@ const openEditModal = (id) => {
             return response.json();
         })
         .then(data => {
-            console.log("User data fetched:", data);
-
             document.getElementById("user-id").value = data.id;
             document.getElementById("first-name").value = data.firstname;
             document.getElementById("last-name").value = data.lastname;
@@ -80,6 +77,37 @@ const openEditModal = (id) => {
         .catch(error => {
             console.error("Error fetching user data:", error);
         });
+};
+
+const deleteUser = (id) => {
+    const url = `delete_user/${id}`;
+
+    fetch(url, {
+        method: 'DELETE',
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log(data);
+        if (data.success) {
+            const userRow = document.getElementById(`user-row-${id}`);
+            if (userRow) {
+                userRow.remove();
+                alert("User deleted successfully");
+            } else {
+                console.error(`User row with ID user-row-${id} not found`);
+            }
+        } else {
+            alert("Failed to delete user");
+        }
+    })
+    .catch(error => {
+        console.error("Error deleting user:", error);
+    });
 };
 
 document.getElementById("edit-user-form").addEventListener("input", function () {
