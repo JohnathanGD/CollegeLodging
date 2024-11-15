@@ -113,14 +113,19 @@
 
         <div class="apartments-list">
             <h2>Available Apartments</h2>
-            <div class="apartment-item">
-                <h3>Apartment 1</h3>
-                <p>Details about the apartment</p>
-            </div>
-            <div class="apartment-item">
-                <h3>Apartment 2</h3>
-                <p>Details about the apartment</p>
-            </div>
+            {% if listings %}
+                {% for apartment in listings%}
+                    <div class = "apartment-item">
+                        <p><strong>Name:</strong> {{ apartment.title }}</p>
+                        <p><strong>Price:</strong> ${{ apartment.price }}</p>
+                        <p><strong>Beds:</strong> {{ apartment.bedroom_count }} | <strong>Baths:</strong> {{ apartment.bathroom_count}}</p>
+                        <p><strong>Address:</strong> {{ apartment.street_address }}</p>
+                        <p>{{ apartment.description }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+             <p>No apartments available at the moment.</p>
+            {% endif %}
         </div>
     </main>
 </body>
