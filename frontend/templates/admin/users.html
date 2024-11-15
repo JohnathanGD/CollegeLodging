@@ -34,7 +34,8 @@
                         <td>{{ user.lastname }}</td>
                         <td>{{ user.email }}</td>
                         <td>
-                            {% set roles = user.roles.split(',') %}
+                            {% set roles = user.roles.split(',') if user.roles else [] %}
+                    
                             {% for role in roles[:3] %}
                                 <span class="role-label {{ role | lower }}">{{ role }}</span>
                             {% endfor %}
