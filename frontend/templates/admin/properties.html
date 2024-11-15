@@ -13,8 +13,7 @@
 
 {% block content %}
     <div class="header-container">
-        <!-- Add Property Button positioned to the right -->
-        <a href="#">
+        <a href="{{ url_for('admin.add_property') }}">
             <button class="add-property-button">Add Property</button>
         </a>
     </div>
@@ -35,7 +34,7 @@
                         <th>Furnished</th>
                         <th>Pets Allowed</th>
                         <th>Utilities Included</th>
-                        <th>Available</th> <!-- New column added -->
+                        <th>Available</th>
                         <th>Actions</th>
                     </tr>
                 </thead>

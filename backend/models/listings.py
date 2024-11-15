@@ -4,8 +4,8 @@ from datetime import datetime
 
 class Listing:
     def __init__(self, id, title, description, street_address, city, state, postal_code, country,
-                 price, bedroom_count, bathroom_count, furnished=False, pets_allowed=False,
-                 utilities_included=False, property_type=None, date_listed=None):
+             price, bedroom_count, bathroom_count, furnished=False, pets_allowed=False,
+             utilities_included=False, type=None, date_listed=None):
         self.id = id
         self.title = title
         self.description = description
@@ -20,8 +20,9 @@ class Listing:
         self.furnished = furnished
         self.pets_allowed = pets_allowed
         self.utilities_included = utilities_included
-        self.property_type = property_type
+        self.type = type  # New property type field
         self.date_listed = date_listed if date_listed else datetime.now()
+
 
     @staticmethod
     def get_by_id(listing_id):  # Get listing by ID
@@ -43,10 +44,11 @@ class Listing:
                 furnished=listing_data['furnished'],
                 pets_allowed=listing_data['pets_allowed'],
                 utilities_included=listing_data['utilities_included'],
-                property_type=listing_data['property_type'],
+                type=listing_data['type'],  # Added property_type
                 date_listed=listing_data['date_listed']
             )
         return None
+
 
     @staticmethod
     def get_all():  # Get all listings
@@ -68,44 +70,48 @@ class Listing:
                 furnished=listing_data['furnished'],
                 pets_allowed=listing_data['pets_allowed'],
                 utilities_included=listing_data['utilities_included'],
-                property_type=listing_data['property_type'],
+                type=listing_data['type'],  # Added property_type
                 date_listed=listing_data['date_listed']
             ))
         return listings
 
+
     def save(self):  # Save new listing to the database
         insert_query = """
             INSERT INTO listings (title, description, street_address, city, state, postal_code, country, 
-                                  price, bedroom_count, bathroom_count, furnished, pets_allowed, 
-                                  utilities_included, property_type, date_listed)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+                                price, bedroom_count, bathroom_count, furnished, pets_allowed, 
+                                utilities_included, type, date_listed)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
         """
         params = (
             self.title, self.description, self.street_address, self.city, self.state, self.postal_code,
             self.country, self.price, self.bedroom_count, self.bathroom_count, self.furnished, 
-            self.pets_allowed, self.utilities_included, self.property_type, self.date_listed
+            self.pets_allowed, self.utilities_included, self.type, self.date_listed
         )
         queries.execute_query(insert_query, params)
+
 
     def update(self):  # Update existing listing in the database
         update_query = """
             UPDATE listings 
             SET title = %s, description = %s, street_address = %s, city = %s, state = %s, postal_code = %s,
                 country = %s, price = %s, bedroom_count = %s, bathroom_count = %s, furnished = %s,
-                pets_allowed = %s, utilities_included = %s, property_type = %s, date_listed = %s
+                pets_allowed = %s, utilities_included = %s, type = %s, date_listed = %s
             WHERE id = %s;
         """
         params = (
             self.title, self.description, self.street_address, self.city, self.state, self.postal_code,
             self.country, self.price, self.bedroom_count, self.bathroom_count, self.furnished,
-            self.pets_allowed, self.utilities_included, self.property_type, self.date_listed, self.id
+            self.pets_allowed, self.utilities_included, self.type, self.date_listed, self.id
         )
         queries.execute_query(update_query, params)
+
 
     def delete(self):  # Delete listing from the database
         delete_query = "DELETE FROM listings WHERE id = %s;"
         params = (self.id,)
         queries.execute_query(delete_query, params)
+
 
     @staticmethod
     def search(filters):  # Search listings with filters
@@ -124,6 +130,9 @@ class Listing:
         if filters.get('city'):
             where_clauses.append("city = %s")
             params.append(filters['city'])
+        if filters.get('type'):  # Added property_type filter
+            where_clauses.append("type = %s")
+            params.append(filters['type'])
         
         where_clause = " AND ".join(where_clauses) if where_clauses else "1"
         search_query = f"SELECT * FROM listings WHERE {where_clause};"
@@ -146,7 +155,7 @@ class Listing:
                 furnished=listing_data['furnished'],
                 pets_allowed=listing_data['pets_allowed'],
                 utilities_included=listing_data['utilities_included'],
-                property_type=listing_data['property_type'],
+                type=listing_data['type'],  # Added property_type
                 date_listed=listing_data['date_listed']
             ))
         return listings
