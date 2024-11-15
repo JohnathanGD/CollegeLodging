@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, current_app as app, g, url_for, flash
+from flask import Blueprint, render_template, request, redirect, current_app as app, g, url_for, flash, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from backend.models.users import User
 from backend.models.listings import Listing
@@ -76,7 +76,6 @@ def users():
 
     def get_user_count():
         count = int(queries.execute_query_with_results(queries.GET_TOTAL_USERS, fetch_one=True, dictionary=True)['COUNT(*)'])
-        print(count, type(count))
 
         return count
 
@@ -95,6 +94,25 @@ def users():
         user['created_at'] = user['created_at'].strftime('%B %d, %Y %I:%M %p')
 
     return render_template('admin/users.html', users=users, total_pages=total_pages, current_page=page)
+
+@admin_bp.route('/get_user/<int:user_id>', methods=['GET'])
+@login_required
+@admin_only
+def get_user(user_id):
+    user = User.get_by_id(user_id)
+    print(user)
+    if user:
+        print("User found.")
+        return jsonify({
+            'id': user.id,
+            'firstname': user.firstname,
+            'lastname': user.lastname,
+            'email': user.email,
+            'roles': user.roles,
+            'created_at': user.created_at
+        })
+    print('User not found.')
+    return jsonify({'error': 'User not found'}), 404
 
 @admin_bp.route('/properties')
 @login_required

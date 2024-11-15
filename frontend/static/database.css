@@ -19,6 +19,7 @@
     --green-color: #03CEA4;
     --purple-color: #6F42C1;
     --dark-color: #1E1E1E;
+    --light-grey-color: #cacaca;
     --grey-color: #898989;
     --dark-grey-color: #333;
     --toggle-color: #DDD;
@@ -320,6 +321,32 @@
     background-color: var(--secondary-color);
 }
 
+/* Form Styling */
+.property-form .form-group {
+    margin-bottom: 15px;
+}
+
+.property-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.property-form input,
+.property-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.property-form textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
 /* General Form Styles */
 .property-form {
     max-width: 600px;
@@ -438,4 +465,115 @@ label {
 input[type="checkbox"]:focus {
     outline: none; /* Remove outline when checkbox is focused */
     border-color: #007bff; /* Add focus style (optional) */
+}
+
+/* Modal */
+.bg-modal {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+
+}
+
+.modal-content {
+    width: 80%;
+    max-width: 500px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    text-align: left;
+}
+
+.modal-edit-content {
+    padding-top: 20px;
+}
+
+.bg-modal .form-row {
+    display: flex;
+    gap: 10px;
+}
+
+.bg-modal .half-width {
+    flex: 1;
+}
+
+.bg-modal .quarter-width {
+    width: 25%;
+    flex: 0 0 25%;
+}
+
+.edit-user-form {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.modal-header {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.bg-modal .form-group input {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 7px;
+}
+
+.bg-modal .form-group label {
+    font-size: 14px;
+    color: var(--grey-color);
+}
+
+.close-modal-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+
+.modal-buttons .cancel-button, .submit-button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+.modal-buttons .cancel-button {
+    background-color: var(--light-grey-color);
+    color: var(--dark-grey-color);
+}
+
+.modal-buttons .submit-button {
+    background-color: var(--blue-color);
+    color: white;
+}
+
+.modal-buttons .cancel-button:hover {
+    background-color: #b5b5b5;
+}
+
+.modal-buttons .submit-button:hover {
+    background-color: rgba(56, 182, 255, 0.8);
+}
+
+button:disabled {
+    cursor: not-allowed;
 }

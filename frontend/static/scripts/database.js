@@ -6,23 +6,82 @@ function toggleSelectAll(source) {
 }
 
 function changePage(action) {
-    const paginationDiv = document.querySelector('.pagination');
-    const currentPage = parseInt(paginationDiv.getAttribute('data-current-page'));
-    const totalPages = parseInt(paginationDiv.getAttribute('data-total-pages'));
-
-    let newPage = currentPage;
-
+    let currentPage = window.currentPage;
+    const totalPages = window.totalPages;
+    
     if (action === 'next') {
-        if (newPage < totalPages) {
-            newPage += 1;
+        if (currentPage < totalPages) {
+            currentPage += 1;
         }
     } else if (action === 'prev') {
-        if (newPage > 1) {
-            newPage -= 1;
+        if (currentPage > 1) {
+            currentPage -= 1;
         }
     } else {
-        newPage = action;
+        currentPage = action;
     }
 
-    window.location.href = `?page=${newPage}`;
+    window.location.href = `?page=${currentPage}`;
 }
+
+function hideModal() {
+    document.querySelector(".bg-modal").style.display = "none";
+}
+
+function showModal() {
+    document.querySelector(".bg-modal").style.display = "flex";
+}
+
+function showModalContent(queryName, button) {
+    showModal();
+    document.querySelector(queryName).style.display = "block";
+    document.querySelector(queryName).style.visibility = "visible";
+}
+
+function hideModalContent(queryName) {
+    document.querySelector(queryName).style.display = "none";
+    document.querySelector(queryName).style.visibility = "hidden";
+}
+
+function hideAllModalContent() {
+    var modals = [".modal-edit-content"];
+
+    for (var i = 0; i < modals.length; i++) {
+        hideModalContent(modals[i]);
+    }
+
+    hideModal();
+}
+
+const openEditModal = (id) => { 
+    const url = `get_user/${id}`;
+    console.log("Fetching user data from URL:", url);
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("User data fetched:", data);
+
+            document.getElementById("user-id").value = data.id;
+            document.getElementById("first-name").value = data.firstname;
+            document.getElementById("last-name").value = data.lastname;
+            document.getElementById("email").value = data.email;
+            document.getElementById("roles").value = data.roles;
+            document.getElementById("created-at").value = data.created_at;
+
+            showModalContent(".modal-edit-content");
+            document.querySelector(".submit-button").disabled = true;
+        })
+        .catch(error => {
+            console.error("Error fetching user data:", error);
+        });
+};
+
+document.getElementById("edit-user-form").addEventListener("input", function () {
+    document.querySelector(".submit-button").disabled = false;
+});

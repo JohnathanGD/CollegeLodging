@@ -42,7 +42,7 @@
                         </td>
                         <td class="created-by column">{{ user.created_at }}</td>
                         <td class="action-buttons">
-                            <button class="edit-button icon">
+                            <button class="edit-button icon" onclick="openEditModal('{{ user.id }}')">
                                 <i class="bx bxs-edit-alt"></i>
                             </button>
                             <button class="delete-button icon">
@@ -71,6 +71,51 @@
                     <i class='bx bx-right-arrow-alt' ></i>
                 </button>
             </div>                  
+        </div>
+    </div>
+
+    <div class="bg-modal">
+        <div class="modal-content">
+            <div class="close-modal-button" onclick="hideAllModalContent()">
+                <i class='bx bx-x' ></i>
+            </div>
+
+            <h2 class="modal-header">Edit User</h2>
+            
+            <div class="modal-edit-content">
+                <form id="edit-user-form" class="edit-user-form">
+                    <div class="form-group quarter-width">
+                        <label for="user-id">ID</label>
+                        <input type="text" id="user-id" name="user-id" readonly disabled>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label for="first-name">First Name</label>
+                            <input type="text" id="first-name" name="first-name" data-original="">
+                        </div>
+                        <div class="form-group half-width">
+                            <label for="last-name">Last Name</label>
+                            <input type="text" id="last-name" name="last-name" data-original="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" data-original="">
+                    </div>
+                    <div class="form-group">
+                        <label for="roles">User Roles</label>
+                        <input type="text" id="roles" name="roles">
+                    </div>
+                    <div class="form-group">
+                        <label for="created-at">Date Created</label>
+                        <input type="text" id="created-at" name="created-at" readonly disabled>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="submit" class="submit-button">Save</button>
+                        <button type="button" class="cancel-button" onclick="hideAllModalContent()">Cancel</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
