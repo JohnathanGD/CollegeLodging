@@ -31,8 +31,15 @@ def signup():
         params = (email, generate_password_hash(password), firstname, lastname)
 
         if (queries.execute_query(queries.INSERT_NEW_USER, params)):
-            flash('Signup successful! Please log in.', 'success')
-            return redirect(url_for('auth.login'))
+            user_id = queries.execute_query_with_results(queries.GET_USER_ID_BY_EMAIL, (email,), fetch_one=True)[0]
+            
+            if user_id is None:
+                flash('An error occurred during signup. Please try again later.', 'error')
+                return redirect(url_for('auth.signup'))
+
+            if (queries.execute_query(queries.ADD_USER_ROLE_BY_NAME, (user_id, 'user'))):
+                flash('Signup successful! Please log in.', 'success')
+                return redirect(url_for('auth.login'))
         else:
             flash('An error occurred during signup. Please try again later.', 'error')
             return redirect(url_for('auth.signup'))

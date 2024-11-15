@@ -52,7 +52,7 @@
                 <li><a href="{{ url_for('main.index') }}">Home</a></li>
                 <li><a href="#">Liked</a></li>
                 {% if current_user.is_admin %}
-                    <li><a href="{{ url_for('admin.dashboard') }}">Admin Dashboard</a></li>
+                    <li><a href="{{ url_for('admin.dashboard') }}">Dashboard</a></li>
                 {% endif %}
                 {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>

@@ -29,9 +29,17 @@ def signup():
             flash('User with this email already exists.', 'error')
             return render_template('admin/admin_signup.html')
         
-        params = (email, generate_password_hash(password), firstname, lastname, 'admin', True)
+        params = (email, generate_password_hash(password), firstname, lastname, True)
+        roles = ['admin', 'user']
 
-        if (queries.execute_query(queries.INSERT_NEW_USER_WITH_USER_TYPE_AND_IS_ADMIN, params)):
+        if (queries.execute_query(queries.INSERT_NEW_USER_WITH_IS_ADMIN, params)):
+            user_id = queries.execute_query_with_results(queries.GET_USER_ID_BY_EMAIL, (email,), fetch_one=True)[0]
+
+            for role in roles:
+                if not queries.execute_query(queries.ADD_USER_ROLE_BY_NAME, (user_id, role)):
+                    flash('An error occurred during signup. Please try again later.', 'error')
+                    return redirect(url_for('admin.signup'))
+
             flash('Signup successful! Please log in.', 'success')
             return redirect(url_for('auth.login'))
         else:

@@ -82,6 +82,8 @@ DELETE_TABLE = "DROP TABLE %s;"
 GET_USERS = "SELECT * FROM users;"
 GET_USER_BY_ID = "SELECT * FROM users WHERE id = %s;"
 GET_USER_BY_EMAIL = "SELECT * FROM users WHERE email = %s;"
+GET_ATTRIBUTE_BY_USER_ID = "SELECT %s FROM users WHERE id = %s;"
+GET_USER_ID_BY_EMAIL = "SELECT id FROM users WHERE email = %s;"
 GET_USER_BY_USERNAME = "SELECT * FROM users WHERE username = %s;"
 GET_USERS_WITH_ROLES = '''
 SELECT users.id, users.firstname, users.lastname, users.email, GROUP_CONCAT(roles.role_name) as roles, users.is_admin, users.created_at
