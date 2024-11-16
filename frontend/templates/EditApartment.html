@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apartment Listing</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the external CSS file -->
+</head>
+<body>
+
+<header>
+    <div class="header">
+        <h1>Apartment Listing Portal</h1>
+    </div>
+</header>
+
+<div class="container">
+    <h2 class="content-block">Sign Up Your Apartment</h2>
+    <form action="/submit-apartment" method="POST">
+        <label for="apartmentname">Apartment Name:</label>
+        <input type="text" id="apartmentname" name="apartment_name" class="input-box" placeholder="Enter the name of the apartment" required>
+
+        <label for="state">State:</label>
+        <input type="text" id="state" name="state" class="input-box" placeholder="Enter the apartment's State" required>
+
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" class="input-box" placeholder="Enter the apartment's City" required>
+
+        <label for="zipcode">Zip Code:</label>
+        <input type="text" id="zipcode" name="zipcode" class="input-box" placeholder="Enter the apartment's Zip Code" required>
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" class="input-box" placeholder="Enter the apartment's Address" required>
+
+        <label for="owner-name">Owner Name:</label>
+        <input type="text" id="owner-name" name="owner_name" class="input-box" placeholder="Enter the owner's name or business" required>
+
+        <label for="email">Email Address:</label>
+        <input type="text" id="email" name="email" class="input-box" placeholder="Enter a contact email" required>
+
+        <label for="phone">Phone Number:</label>
+        <input type="text" id="phone" name="phone" class="input-box" placeholder="Enter a contact number" required>
+
+        <label for="rent">Rent:</label>
+        <input type="text" id="rent" name="rent" class="input-box" placeholder="Enter the rent amount" required>
+
+        <label for="description">Apartment Description:</label>
+        <textarea id="description" name="description" class="input-box" rows="4" placeholder="Enter a brief description of the apartment" required></textarea>
+
+        <input type="submit" value="Submit Apartment" class="btn">
+    </form>
+</div>
+
+</body>
+</html>
