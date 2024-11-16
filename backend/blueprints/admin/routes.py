@@ -8,9 +8,11 @@ import utils.queries as queries
 from utils.decorators import unauthenticated_user, login_required, admin_only
 from backend import cache
 from datetime import datetime
+import base64
 
 admin_bp = Blueprint('admin', __name__)
 PAGINATION_LIMIT = 10
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 @admin_bp.route('/signup', methods=['GET', 'POST'])
 @unauthenticated_user
@@ -144,12 +146,50 @@ def properties():
 
     return render_template('admin/properties.html', listings=listings)
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @cache.cached(timeout=60)
 def get_listings():
-    # Execute the GET_LISTINGS query
     properties = queries.execute_query_with_results(queries.GET_LISTINGS, dictionary=True)
-    
-    return properties
+    property_images = queries.execute_query_with_results(queries.GET_LISTING_IMAGES, dictionary=True)
+
+    images_by_listing_id = {}
+    for image in property_images:
+        listing_id = image['listing_id']
+        if listing_id not in images_by_listing_id:
+            images_by_listing_id[listing_id] = []
+        # Encode image data as Base64
+        images_by_listing_id[listing_id].append(base64.b64encode(image['image_data']).decode('utf-8'))
+
+    listings_dict = {}
+    for property in properties:
+        listing_id = property['id']
+        if listing_id not in listings_dict:
+            listings_dict[listing_id] = {
+                'id': property['id'],
+                'title': property['title'],
+                'description': property['description'],
+                'street_address': property['street_address'],
+                'city': property['city'],
+                'state': property['state'],
+                'postal_code': property['postal_code'],
+                'country': property['country'],
+                'price': property['price'],
+                'bedroom_count': property['bedroom_count'],
+                'bathroom_count': property['bathroom_count'],
+                'furnished': property['furnished'],
+                'pets_allowed': property['pets_allowed'],
+                'utilities_included': property['utilities_included'],
+                'is_available': property['is_available'],
+                'type': property['type'],
+                'created_at': property['created_at'],
+                'images': images_by_listing_id.get(listing_id, [])
+            }
+
+    return list(listings_dict.values())
+
+
 
 @admin_bp.route('/add-property', methods=['GET', 'POST'])
 @login_required
@@ -170,9 +210,7 @@ def add_property():
         furnished = request.form.get('furnished') == 'on'
         pets_allowed = request.form.get('pets_allowed') == 'on'
         utilities_included = request.form.get('utilities_included') == 'on'
-        
-        # Add the missing 'type' and date_listed parameters
-        type = request.form.get('type')
+        type = request.form.getlist('type')
         
         # Create a new Listing object
         new_property = Listing(

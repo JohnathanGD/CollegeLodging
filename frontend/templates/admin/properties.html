@@ -25,6 +25,7 @@
                     <tr>
                         <th><input type="checkbox" name="select-all" onclick="toggleSelectAll(this)"/></th>
                         <th>ID</th>
+                        <th>Image</th>
                         <th>Title</th>
                         <th>Description</th>
                         <th>Location</th>
@@ -43,6 +44,13 @@
                         <tr>
                             <td><input type="checkbox" name="select-checkbox" class="select-checkbox"/></td>
                             <td>{{ listing.id }}</td>
+                            <td>
+                                {% if listing.images %}
+                                    <img src="data:image/jpeg;base64,{{ listing.images[0] }}" alt="Property Image" class="property-image">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="No Image" class="property-image">
+                                {% endif %}
+                            </td>
                             <td>{{ listing.title }}</td>
                             <td>{{ listing.description }}</td>
                             <td>{{ listing.street_address }}, {{ listing.city }}, {{ listing.state }} {{ listing.postal_code }}, {{ listing.country }}</td>
