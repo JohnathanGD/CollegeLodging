@@ -183,3 +183,84 @@ class Listing:
             return False
 
         return self.insert_image(image_data)
+
+    def get_images(self):
+        if self.id is None:
+            print("Listing ID is required to get images.")
+            return None
+        
+        images_data = queries.execute_query_with_results(queries.GET_LISTING_IMAGES_BY_LISTING_ID, (self.id,), dictionary=True)
+
+        images = []
+        for image_data in images_data:
+            images.append({
+                'id': image_data['id'],
+                'listing_id': image_data['listing_id'],
+                'image_data': image_data['image_data']
+            })
+        return images
+    
+    def delete_images(self):
+        if self.id is None:
+            print("Listing ID is required to delete images.")
+            return False
+        
+        if(queries.execute_query(queries.DELETE_LISTING_IMAGES_BY_LISTING_ID, (self.id,))):
+            return True
+        
+        print("Error deleting images.")
+        return False
+    
+    def delete_image(self, image_id):
+        if image_id is None:
+            print("Image ID is required to delete an image.")
+            return False
+        
+        if(queries.execute_query(queries.DELETE_LISTING_IMAGE, (image_id,))):
+            return True
+        
+        print("Error deleting image.")
+        return False
+    
+    def get_image(self, image_id):
+        if image_id is None:
+            print("Image ID is required to get an image.")
+            return None
+        
+        image_data = queries.execute_query_with_results(queries.GET_LISTING_IMAGE_BY_ID, (image_id,), dictionary=True, fetch_one=True)
+        
+        if image_data:
+            return {
+                'id': image_data['id'],
+                'listing_id': image_data['listing_id'],
+                'image_data': image_data['image_data']
+            }
+        return None
+    
+    def update_image(self, image_id, image_data):
+        if image_id is None:
+            print("Image ID is required to update an image.")
+            return False
+        
+        if image_data is None:
+            print("No image data provided.")
+            return False
+        
+        if(queries.execute_query(queries.UPDATE_LISTING_IMAGE, ('image_data', image_data, image_id))):
+            return True
+        
+        print("Error updating image.")
+        return False
+    
+    def update_image_by_url(self, image_id, image_url):
+        image_data = None
+
+        if os.path.exists(image_url):
+            with open(image_url, 'rb') as image_file:
+                image_data = image_file.read()
+        else:
+            print(f"Image file {image_url} not found.")
+            return False
+
+        return self.update_image(image_id, image_data)
+    
