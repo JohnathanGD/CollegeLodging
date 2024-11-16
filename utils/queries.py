@@ -57,7 +57,7 @@ CREATE_LISTINGS_TABLE = '''CREATE TABLE IF NOT EXISTS listings (
 CREATE_LISTING_IMAGES_TABLE = '''CREATE TABLE IF NOT EXISTS listing_images (
     id SERIAL PRIMARY KEY,
     listing_id BIGINT UNSIGNED NOT NULL,
-    image_url TEXT NOT NULL,
+    image_data LONGBLOB NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (listing_id) REFERENCES listings (id) ON DELETE CASCADE
 );'''
@@ -150,6 +150,7 @@ GET_USER_ROLE_BY_NAME = "SELECT * FROM user_roles WHERE user_id = %s AND role_id
 DELETE_USER = "DELETE FROM users WHERE id = %s;"
 
 # Listing Queries
+GET_LISTING_ID_BY_TITLE = "SELECT id FROM listings WHERE title = %s;"
 GET_LISTING_BY_ID = "SELECT * FROM listings WHERE id = %s;"
 GET_LISTINGS = "SELECT * FROM listings;"
 GET_LISTINGS_BY_KEY = "SELECT * FROM listings WHERE %s = %s;"
@@ -165,7 +166,10 @@ GET_LISTING_IMAGE_BY_ID = "SELECT * FROM listing_images WHERE id = %s;"
 GET_LISTING_IMAGES = "SELECT * FROM listing_images;"
 GET_LISTING_IMAGES_BY_KEY = "SELECT * FROM listing_images WHERE %s = %s;"
 GET_LISTING_IMAGES_BY_LISTING_ID = "SELECT * FROM listing_images WHERE listing_id = %s;"
-INSERT_NEW_LISTING_IMAGE = "INSERT INTO listing_images (listing_id, image_url);"
+
+INSERT_NEW_LISTING_IMAGE = '''INSERT INTO listing_images (listing_id, image_data)
+VALUES(%s, %s);'''
+
 UPDATE_LISTING_IMAGE = "UPDATE listing_images SET %s = %s WHERE id = %s;"
 DELETE_LISTING_IMAGE = "DELETE FROM listing_images WHERE id = %s;"
 DELETE_LISTING_IMAGES_BY_LISTING_ID = "DELETE FROM listing_images WHERE listing_id = %s;"

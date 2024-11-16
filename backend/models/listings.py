@@ -1,6 +1,7 @@
 from backend.db import get_db_connection
 import utils.queries as queries
 from datetime import datetime
+import os
 
 class Listing:
     def __init__(self, id, title, description, street_address, city, state, postal_code, country,
@@ -45,7 +46,7 @@ class Listing:
                 pets_allowed=listing_data['pets_allowed'],
                 utilities_included=listing_data['utilities_included'],
                 type=listing_data['type'],  # Added property_type
-                date_listed=listing_data['date_listed']
+                date_listed=listing_data['created_at']
             )
         return None
 
@@ -159,3 +160,26 @@ class Listing:
                 date_listed=listing_data['date_listed']
             ))
         return listings
+    
+    def insert_image(self, image_data):
+        if image_data is None:
+            print("No image data provided.")
+            return False
+        
+        if (queries.execute_query(queries.INSERT_NEW_LISTING_IMAGE, (self.id, image_data))):
+            return True
+        
+        print("Error inserting image.")
+        return False
+
+    def insert_image_by_url(self, image_url):
+        image_data = None
+
+        if os.path.exists(image_url):
+            with open(image_url, 'rb') as image_file:
+                image_data = image_file.read()
+        else:
+            print(f"Image file {image_url} not found.")
+            return False
+
+        return self.insert_image(image_data)
