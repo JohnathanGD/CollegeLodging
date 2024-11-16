@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- Adjust path as needed -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
@@ -19,25 +19,23 @@
     <main class="login-page">
         <div class="background-blur"></div>
         <div class="login-container">
-            <h2>Create an account</h2>
-            <form action="{{ url_for('auth.signup') }}" method="POST">
-                <!-- First Name -->
+            <h2>Create an admin account</h2>
+            <form action="{{ url_for('admin.signup') }}" method="POST">
                 <label for="first-name">First Name:</label>
                 <input type="text" id="first-name" name="first-name" required>
 
-                <!-- Last Name -->
                 <label for="last-name">Last Name:</label>
                 <input type="text" id="last-name" name="last-name" required>
 
-                <!-- Email -->
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
 
-                <!-- Password -->
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
 
-                <!-- Submit Button -->
+                <label for="confirm-password">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+
                 <button type="submit">Sign Up</button>
             </form>
 
@@ -46,7 +44,7 @@
                     Already have an account? <a href="{{ url_for('auth.login') }}">Login</a>
                 </p>
                 <p>
-                    Are you an admin? <a href="{{ url_for('admin.signup') }}">Register as admin</a>
+                    Not an admin? <a href="{{ url_for('auth.signup') }}">Register as user</a>
                 </p>
             </div>
         </div>

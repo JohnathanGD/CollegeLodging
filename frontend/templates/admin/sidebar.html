@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css">
+
+    {% block css %}{% endblock %}
+</head>
+<body>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <a href="{{ url_for('main.index') }}">
+                    <span class="image">
+                        <img src="{{ url_for('static', filename='images/logo_small.png') }}" alt="Logo">
+                    </span>
+                </a>
+                <div class="text logo-text">
+                    <span>
+                        <img class="name" src="{{ url_for('static', filename='images/logo_small2.png') }}" alt="Logo Banner">
+                    </span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="{{ url_for('admin.dashboard') }}">
+                            <i class='bx bxs-dashboard icon' ></i>
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                        <span class="tooltip">Dashboard</span>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="{{ url_for('admin.database') }}">
+                            <i class='bx bxs-data icon' ></i>
+                            <span class="text nav-text">Database</span>
+                        </a>
+                        <span class="tooltip">Database</span>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="{{ url_for('admin.users' )}}">
+                            <i class='bx bxs-group icon' ></i>
+                            <span class="text nav-text">Users</span>
+                        </a>
+                        <span class="tooltip">Users</span>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="{{ url_for('admin.properties' )}}">
+                            <i class='bx bxs-building-house icon'></i>
+                            <span class="text nav-text">Properties</span>
+                        </a>
+                        <span class="tooltip">Properties</span>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bxs-bar-chart-square icon' ></i>
+                            <span class="text nav-text">Analytics</span>
+                        </a>
+                        <span class="tooltip">Analytics</span>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bxs-cog icon' ></i>
+                            <span class="text nav-text">Settings</span>
+                        </a>
+                        <span class="tooltip">Settings</span>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-support icon' ></i>
+                            <span class="text nav-text">Support</span>
+                        </a>
+                        <span class="tooltip">Support</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li class="">
+                    <a href="{{ url_for('auth.logout') }}">
+                        <i class='bx bx-log-out icon' ></i>
+                        <span class="text nav-text">Logout</span>
+                    </a>
+                </li>  
+            </div>
+        </div>
+    </nav>
+
+    <section class="dashboard-header">
+        <span class="left">
+            <h2 class="header">
+                {% block dashboard_header %}Dashboard{% endblock %}
+            </h2>
+        </span>
+        <div class="right">
+            <div class="search">
+                <i class='bx bx-search search-icon'></i>
+                <input type="text" placeholder="Search..." class="search-box">
+            </div>
+            <i class='bx bxs-user-circle profile-icon'></i>
+        </div>
+    </section>
+
+    <section class="dashboard-content">
+        {% block content %}
+            <p>Dashboard content</p>
+            {% block script %}{% endblock %}
+        {% endblock %}
+    </section>
+
+    <script>
+        const body = document.querySelector('body'),
+        sidebar = document.querySelector('.sidebar');
+        toggle = document.querySelector(".toggle"),
+        content = document.querySelector('.dashboard-content');
+
+        toggle.addEventListener("click" , () =>{
+            sidebar.classList.toggle("close");
+            content.classList.toggle("sidebar-close");
+        })
+    </script>
+</body>
+</html>

@@ -12,27 +12,33 @@
         <div class="logo">College Lodging</div>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="login.html">Login</a></li>
+                <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                {% if current_user.is_admin %}
+                    <li><a href="{{ url_for('admin.dashboard') }}">Dashboard</a></li>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                {% else %}
+                <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>
 
-    <main class="home-page">
+    <section class="home-page">
         <div class="search-container-home">
             <div class="search-background-home">
                 <h1>Discover Your New Home</h1>
                 <div class="search-box-home">
                     <input type="text" placeholder="Enter a location" id="home-search-input">
-                    <form action="{{ url_for('apartment_search') }}" method="GET">
+                    <form action="{{ url_for('main.apartment_search') }}" method="GET">
                         <button type="submit" id="home-search-btn">Search</button>
-                        
                     </form>
                     
                 </div>
             </div>
         </div>
-    </main>
+    </section>
 
     <section class="content-block">
         <h2>Apartments Near Florida State University You May Like</h2>
@@ -117,9 +123,7 @@
             </button>
         </div>
     </section>
-
-
-    
+    {% include 'footer.html' %}
 </body>
 </html>
 

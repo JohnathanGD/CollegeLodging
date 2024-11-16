@@ -12,7 +12,7 @@
         <div class="logo">CollegeLodging.com</div>
         <nav>
             <ul>
-                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('main.index') }}">Home</a></li>
             </ul>
         </nav>
     </header>
@@ -20,8 +20,8 @@
     <main>
         <div class="login-container">
             <h2>Login to your account</h2>
-            <form action="/login" method="POST">
-                <label for="Email">Email:</label>
+            <form action="{{ url_for('auth.login') }}" method="POST">
+                <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
 
                 <label for="password">Password:</label>
@@ -29,7 +29,7 @@
 
                 <button type="submit">Sign In</button>
             </form>
-            <form action="/signup" method="GET">
+            <form action="{{ url_for('auth.signup') }}" method="GET">
                 <button type="submit" class="sign-up-btn">Sign Up</button>
             </form>
         </div>
