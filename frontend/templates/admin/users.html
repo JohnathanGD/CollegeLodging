@@ -4,12 +4,15 @@
 
 {% block css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='database.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='toast.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css">
 {% endblock %}
 
 {% block dashboard_header %}Users{% endblock %}
 
 {% block content %}
+    <div id="toastBox" class="toast-container"></div>
+
     <div class="table-wrapper">
         <div class="user-table-container">
             <table class="user-table table">
@@ -45,7 +48,7 @@
                             <button class="edit-button icon" onclick="openEditModal('{{ user.id }}')">
                                 <i class="bx bxs-edit-alt"></i>
                             </button>
-                            <button class="delete-button icon" onclick="deleteUser('{{ user.id }}')">
+                            <button class="delete-button icon" data-user-id="{{ user.id }}">
                                 <i class="bx bxs-trash-alt"></i>
                             </button>
                         </td>              
@@ -121,6 +124,7 @@
 
     {% block js %}
         <script src="{{ url_for('static', filename='scripts/database.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/toast.js') }}"></script>
     {% endblock %}
 
 {% endblock %}

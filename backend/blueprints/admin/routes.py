@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, current_app as app, g, url_for, flash, jsonify
+from flask import Blueprint, render_template, request, redirect, current_app as app, g, url_for, flash, jsonify, get_flashed_messages
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from backend.models.users import User
 from backend.models.listings import Listing
@@ -118,22 +118,31 @@ def get_user(user_id):
 @admin_only
 def delete_user(user_id):
     if user_id == current_user.id:
+        flash('You cannot delete yourself.', 'error')
         return jsonify({
             'success': False,
             'error': 'You cannot delete yourself.',
         }), 400
     
     if queries.execute_query(queries.DELETE_USER_BY_ID, (user_id,)):
+        flash('User deleted successfully.', 'success')
         return jsonify({
             'success': True,
             'message': 'User deleted successfully.'
         }), 200
-    
+
+    flash('An error occurred while deleting the user.', 'error')
     return jsonify({
         'success': False,
         'error': 'An error occurred while deleting the user.'
     }), 500
 
+@admin_bp.route('/get_flash_messages', methods=['GET'])
+@login_required
+@admin_only
+def get_flash_messages():
+    messages = get_flashed_messages(with_categories=True)
+    return jsonify(messages=messages)
 
 @admin_bp.route('/properties')
 @login_required
@@ -188,8 +197,6 @@ def get_listings():
             }
 
     return list(listings_dict.values())
-
-
 
 @admin_bp.route('/add-property', methods=['GET', 'POST'])
 @login_required

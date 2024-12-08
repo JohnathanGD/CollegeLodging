@@ -79,37 +79,62 @@ const openEditModal = (id) => {
         });
 };
 
+document.getElementById("edit-user-form").addEventListener("input", function () {
+    document.querySelector(".submit-button").disabled = false;
+});
+
 const deleteUser = (id) => {
-    const url = `delete_user/${id}`;
+    const url = `/admin/delete_user/${id}`;
 
     fetch(url, {
         method: 'DELETE',
     })
     .then(response => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
+        if (!response.ok) { throw new Error("Network response was not ok"); }
         return response.json();
     })
     .then(data => {
-        console.log(data);
         if (data.success) {
+            console.log("User deleted successfully:", id);
             const userRow = document.getElementById(`user-row-${id}`);
             if (userRow) {
                 userRow.remove();
-                alert("User deleted successfully");
-            } else {
-                console.error(`User row with ID user-row-${id} not found`);
             }
         } else {
-            alert("Failed to delete user");
+            console.error("Failed to delete user:", data.message);
         }
+
+        fetchFlashMessages();
     })
     .catch(error => {
         console.error("Error deleting user:", error);
+        showToast("error", "An error occurred while deleting the user.");
     });
 };
 
-document.getElementById("edit-user-form").addEventListener("input", function () {
-    document.querySelector(".submit-button").disabled = false;
+function fetchFlashMessages() {
+    fetch(`get_flash_messages`, { 
+        method: 'GET', 
+    })
+    .then(response => {
+        if (response.status === 404) { return; }
+        if (!response.ok) { throw new Error("Network response was not ok"); }
+        return response.json();
+    })
+    .then(data => {
+        data.messages.forEach(([category, message]) => {
+            showToast(category, message);
+        });
+    })
+    .catch(error => {
+        console.error("Error fetching flash messages:", error);
+    });
+}
+
+document.querySelectorAll('.delete-button').forEach(button => {
+    button.addEventListener('click', function() {
+        const id = button.getAttribute('data-user-id');
+        console.log(`Deleting user with ID: ${id}`);
+        deleteUser(id);
+    });
 });
