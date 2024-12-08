@@ -32,10 +32,10 @@
                 {% for user in users %}
                     <tr id="user-row-{{ user.id }}">
                         <td><input type="checkbox" name="select-checkbox" class="select-checkbox"/></td>
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.firstname }}</td>
-                        <td>{{ user.lastname }}</td>
-                        <td>{{ user.email }}</td>
+                        <td class="user-id">{{ user.id }}</td>
+                        <td class="user-firstname">{{ user.firstname }}</td>
+                        <td class="user-lastname">{{ user.lastname }}</td>
+                        <td class="user-email">{{ user.email }}</td>
                         <td>
                             {% set roles = user.roles.split(',') if user.roles else [] %}
                     

@@ -14,6 +14,13 @@ admin_bp = Blueprint('admin', __name__)
 PAGINATION_LIMIT = 10
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
+@admin_bp.route('/get_flash_messages', methods=['GET'])
+@login_required
+@admin_only
+def get_flash_messages():
+    messages = get_flashed_messages(with_categories=True)
+    return jsonify(messages=messages)
+
 @admin_bp.route('/signup', methods=['GET', 'POST'])
 @unauthenticated_user
 def signup():
@@ -50,7 +57,6 @@ def signup():
             return redirect(url_for('admin.signup'))
         
     return render_template('admin/admin_signup.html')
-
 
 @admin_bp.route('/dashboard')
 @login_required
@@ -136,14 +142,39 @@ def delete_user(user_id):
         'success': False,
         'error': 'An error occurred while deleting the user.'
     }), 500
-
-@admin_bp.route('/get_flash_messages', methods=['GET'])
+    
+@admin_bp.route('/update_user/<int:user_id>', methods=['PUT'])
 @login_required
-@admin_only
-def get_flash_messages():
-    messages = get_flashed_messages(with_categories=True)
-    return jsonify(messages=messages)
+@admin_only    
+def update_user(user_id):
+    user = User.get_by_id(user_id)
+    if user:
+        data = request.get_json()
+        firstname = data.get('firstname')
+        lastname = data.get('lastname')
+        email = data.get('email')
+        roles = data.get('roles')
 
+        if user.email != email and User.get_by_email(email):
+            flash('User with this email already exists.', 'error')
+            return jsonify({'error': 'User with this email already exists.'}), 400
+
+        if user.firstname == firstname and user.lastname == lastname and user.email == email and user.roles == roles:
+            flash('No changes detected.', 'info')
+            return jsonify({'message': 'No changes detected.'}), 200
+
+        if queries.execute_query(queries.UPDATE_USER_NAME_AND_EMAIL, (email, firstname, lastname, user_id)):
+            flash('User updated successfully.', 'success')
+            return jsonify({'message': 'User updated successfully.'}), 200
+
+        app.logger.debug(f'Updating user {user_id} with data: {data}')
+        flash('An error occurred while updating the user.', 'error')
+        return jsonify({'error': 'An error occurred while updating the user.'}), 500
+
+    flash('User not found.', 'error')
+    return jsonify({'error': 'User not found.'}), 404
+
+# Listings
 @admin_bp.route('/properties')
 @login_required
 @admin_only

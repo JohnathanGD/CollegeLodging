@@ -217,7 +217,6 @@
     color: var(--grey-color);
 }
 
-
 /* Responsive */
 @media (max-width: var(--min-screen-width)) {
     .table-wrapper {

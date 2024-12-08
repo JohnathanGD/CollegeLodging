@@ -114,7 +114,7 @@ UPDATE_USER_EMAIL = "UPDATE users SET email = %s WHERE id = %s;"
 UPDATE_USER_FIRSTNAME = "UPDATE users SET firstname = %s WHERE id = %s;"
 UPDATE_USER_LASTNAME = "UPDATE users SET lastname = %s WHERE id = %s;"
 UPDATE_USER_IS_ADMIN_STATUS = "UPDATE users SET is_admin = %s WHERE id = %s;"
-
+UPDATE_USER_NAME_AND_EMAIL = "UPDATE users SET email = %s, firstname = %s, lastname = %s WHERE id = %s;"
 DELETE_USER_BY_ID = "DELETE FROM users WHERE id = %s;"
 
 # Role Queries

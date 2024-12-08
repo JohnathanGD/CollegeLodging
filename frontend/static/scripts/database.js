@@ -58,9 +58,7 @@ const openEditModal = (id) => {
 
     fetch(url)
         .then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
+            if (!response.ok) { throw new Error("Network response was not ok"); }
             return response.json();
         })
         .then(data => {
@@ -72,16 +70,75 @@ const openEditModal = (id) => {
             document.getElementById("created-at").value = data.created_at;
 
             showModalContent(".modal-edit-content");
-            document.querySelector(".submit-button").disabled = true;
+
+            const submitButton = document.querySelector(".submit-button");
+            submitButton.disabled = true;
+
+            const newSubmitButton = submitButton.cloneNode(true);
+            submitButton.parentNode.replaceChild(newSubmitButton, submitButton);
+
+
+            newSubmitButton.addEventListener("click", function () {
+                updateUser(id);
+            });
         })
         .catch(error => {
             console.error("Error fetching user data:", error);
+            showToast("error", "An error occurred while fetching user data.");
         });
 };
 
 document.getElementById("edit-user-form").addEventListener("input", function () {
     document.querySelector(".submit-button").disabled = false;
 });
+
+document.getElementById("edit-user-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+});
+
+const updateUser = (id) => {
+    const url = `/admin/update_user/${id}`;
+
+    const formData = new FormData(document.getElementById("edit-user-form"));
+
+    const updatedData = {
+        id: formData.get("user-id"),
+        firstname: formData.get("first-name"),
+        lastname: formData.get("last-name"),
+        email: formData.get("email"),
+        roles: formData.get("roles"),
+    };
+
+    console.log("Updating user:", updatedData);
+
+    fetch(url, {
+        method: 'PUT',
+        body: JSON.stringify(updatedData),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => { return response.json(); })
+    .then(data => {
+        if (data.error) { throw new Error(data.message); }
+        console.log("User updated successfully:", data);
+        hideAllModalContent();
+        showToast("success", "User updated successfully.");
+
+        const userRow = document.getElementById(`user-row-${id}`);
+        if (userRow) {
+            userRow.querySelector(".user-firstname").textContent = updatedData.firstname;
+            userRow.querySelector(".user-lastname").textContent = updatedData.lastname;
+            userRow.querySelector(".user-email").textContent = updatedData.email;
+        } else {
+            console.error("Failed to update user:", data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error updating user:", error);
+        showToast("error", "An error occurred while updating the user.");
+    });
+}
 
 const deleteUser = (id) => {
     const url = `/admin/delete_user/${id}`;
@@ -128,6 +185,7 @@ function fetchFlashMessages() {
     })
     .catch(error => {
         console.error("Error fetching flash messages:", error);
+        showToast("error", "An error occurred while fetching flash messages.");
     });
 }
 
@@ -137,4 +195,9 @@ document.querySelectorAll('.delete-button').forEach(button => {
         console.log(`Deleting user with ID: ${id}`);
         deleteUser(id);
     });
+});
+
+document.querySelector('.delete-button').addEventListener('click', (event) => {
+    event.preventDefault();
+    deleteUser(event.target.dataset.userId);
 });
