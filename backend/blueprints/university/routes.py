@@ -3,6 +3,8 @@ import backend.services.university_service as university_service
 
 university_bp = Blueprint('university', __name__)
 
+MAX_RESULTS = 5
+
 @university_bp.route('/search/<string:prefix>')
 def search_university(prefix):
     return jsonify(university_service.get_university_data_by_prefix(prefix))
@@ -38,3 +40,7 @@ def get_university_by_key(key, key_type):
 @university_bp.route('/all')
 def get_all_universities():
     return jsonify(university_service.university_data)
+
+@university_bp.route('/autocomplete/query=<string:query>')
+def autocomplete_university(query):
+    return jsonify(university_service.trie.search(query)[:MAX_RESULTS])
