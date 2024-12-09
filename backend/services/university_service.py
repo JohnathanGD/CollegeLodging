@@ -1,11 +1,11 @@
 import json
 from backend.services.trie import Trie
+import os
 
-UNIVERSITY_DATASET_PATH = '../data/us-colleges-and-universities.json'
+UNIVERSITY_DATASET_PATH = os.path.join(os.path.dirname(__file__), '../data/us-colleges-and-universities.json')
 
 with open(UNIVERSITY_DATASET_PATH) as f:
     university_data = json.load(f)
-
 
 university_index = {}
 trie = Trie()
