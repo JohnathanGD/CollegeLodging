@@ -24,22 +24,19 @@
             </ul>
         </nav>
     </header>
-
-    <section class="home-page">
-        <div class="search-container-home">
-            <div class="search-background-home">
-                <h1>Discover Your New Home</h1>
-                <div class="search-box-home">
-                    <input type="text" placeholder="Enter a location" id="home-search-input">
-                    <form action="{{ url_for('main.apartment_search') }}" method="GET">
-                        <button type="submit" id="home-search-btn">Search</button>
-                    </form>
-                    
+    <div class="search-container-home">
+        <div class="search-background-home">
+            <h1>Discover Your New Home</h1>
+            <div class="search-box-home">
+                <div class="search-bar-container">
+                    <input type="text" placeholder="Find a college or university..." id="search-bar">
+                    <button type="submit" id="home-search-btn">Search</button>
                 </div>
-            </div>
+                <div id="suggestions"></div>
+            </div> 
         </div>
-    </section>
-
+    </div>
+    
     <section class="content-block">
         <h2>Apartments Near Florida State University You May Like</h2>
         <div id="apartments-list"></div>
@@ -124,6 +121,7 @@
         </div>
     </section>
     {% include 'footer.html' %}
+    <script src="{{ url_for('static', filename='scripts/search.js') }}"></script>
 </body>
 </html>
 
