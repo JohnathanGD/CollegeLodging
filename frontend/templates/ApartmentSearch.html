@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>College Lodging test</title>
+    <title>College Lodging</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7gaBE8_0O0TkH-4BqkU-gobPicFEyIwE&callback=initMap&libraries=places" defer></script>
@@ -117,10 +117,21 @@
                 {% for apartment in listings%}
                     <div class = "apartment-item">
                         <p><strong>Name:</strong> {{ apartment.title }}</p>
-                        <p><strong>Price:</strong> ${{ apartment.price }}</p>
+                        <p><strong>Price:</strong> 
+                            {% if apartment.price %}
+                                ${{ apartment.price }}
+                            {% elif apartment.min_price %}
+                                {% if apartment.min_price == apartment.max_price %}
+                                    {{ apartment.min_price }}
+                                {% else %}
+                                    {{ apartment.min_price }} - {{ apartment.max_price }}
+                                {% endif %}
+                            {% else %}
+                                Contact for price
+                            {% endif %}
+                        </p>
                         <p><strong>Beds:</strong> {{ apartment.bedroom_count }} | <strong>Baths:</strong> {{ apartment.bathroom_count}}</p>
                         <p><strong>Address:</strong> {{ apartment.street_address }}</p>
-                        <p>{{ apartment.description }}</p>
                     </div>
                 {% endfor %}
             {% else %}

@@ -5,8 +5,8 @@ function titleCase(s) {
     return s.toLowerCase().replace(/(^|\s|-)\S/g, (match) => match.toUpperCase());
 }
 
-function redirectToSearchPage() {
-    window.location.href = 'apartment-search'
+function redirectToSearchPage(state='fl', city='Tallahassee', university='florida-state-university') {
+    window.location.href = `apartment-search/${state}/${city}/${university}`;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -40,7 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                     searchBar.value = titleCase(university.name);
                                     suggestions.innerHTML = '';
                                     suggestions.style.display = 'none';
-                                    redirectToSearchPage();
+                                    
+                                    redirectToSearchPage(university.state, university.city, university.name);
                                 });
                                 suggestions.appendChild(suggestionItem);
                             });
