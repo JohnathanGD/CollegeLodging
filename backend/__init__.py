@@ -36,7 +36,7 @@ def create_app(config_class=Config):
     app.register_blueprint(main, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/auth')
     app.register_blueprint(admin, url_prefix='/admin')
-    app.register_blueprint(university, url_prefix='/university')
+    app.register_blueprint(university, url_prefix='/university/api/v1')
 
     # Register the error handlers
     register_error_handlers(app)
