@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const suggestions = document.getElementById('suggestions');
 
     searchBar.addEventListener('input', () => {
-        const query = searchBar.value.trim();
+        const query = searchBar.value.trim().toLowerCase();
         suggestions.innerHTML = '';
 
         if (query) {
