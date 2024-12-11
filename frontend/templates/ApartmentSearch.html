@@ -8,7 +8,7 @@
     
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7gaBE8_0O0TkH-4BqkU-gobPicFEyIwE&callback=initMap&libraries=places" defer></script>
     <script>
-        let map, service, infowindow;
+        let map, service;
 
         function initMap() {
             map = new google.maps.Map(document.getElementById("map"), {
@@ -20,7 +20,7 @@
 
             const request = {
                 location: { lat: 30.4419, lng: -84.2985 },
-                radius: 8047, 
+                radius: 8047,
                 query: 'all apartments around florida state university'
             };
 
@@ -37,11 +37,26 @@
         }
 
         function createMarker(place) {
-        const marker = new google.maps.Marker({
-            map: map,
-            position: place.geometry.location
-        });
-    }
+            const marker = new google.maps.Marker({
+                map: map,
+                position: place.geometry.location,
+                title: place.name 
+            });
+
+            const infowindow = new google.maps.InfoWindow({
+                content: `<div>
+                            <strong>${place.name}</strong><br>
+                            ${place.formatted_address || 'Address not available'}
+                        </div>`
+            });
+
+            marker.addListener("click", () => {
+                infowindow.open(map, marker);
+            });
+        }
+
+
+
     </script>
 </head>
 <body>
@@ -110,6 +125,7 @@
                 <div id="map" style="width: 100%; height: 100%;"></div>
             </div>
         </div>
+        
 
         <div class="apartments-list">
             <h2>Available Apartments</h2>
