@@ -88,13 +88,17 @@ const openEditModal = (id) => {
         });
 };
 
-document.getElementById("edit-user-form").addEventListener("input", function () {
-    document.querySelector(".submit-button").disabled = false;
-});
 
-document.getElementById("edit-user-form").addEventListener("submit", function (event) {
-    event.preventDefault();
-});
+if (document.getElementById("edit-user-form")) {
+    document.getElementById("edit-user-form").addEventListener("input", function (event) {
+        document.querySelector(".submit-button").disabled = false;
+        event.preventDefault();
+    });
+
+    document.getElementById("edit-user-form").addEventListener("input", function () {
+        document.querySelector(".submit-button").disabled = false;
+    });
+}
 
 const updateUser = (id) => {
     const url = `/admin/update_user/${id}`;
@@ -189,6 +193,7 @@ function fetchFlashMessages() {
     });
 }
 
+
 document.querySelectorAll('.delete-button').forEach(button => {
     button.addEventListener('click', function() {
         const id = button.getAttribute('data-user-id');
@@ -249,13 +254,16 @@ const openEditListingModal = (id) => {
         });
 };
 
-document.getElementById("edit-listing-form").addEventListener("input", function () {
-    document.querySelector(".submit-button").disabled = false;
-});
+if (document.getElementById("edit-listing-form")) {
+    document.getElementById("edit-listing-form").addEventListener("input", function (event) {
+        document.querySelector(".submit-button").disabled = false;
+        event.preventDefault();
+    });
 
-document.getElementById("edit-listing-form").addEventListener("submit", function (event) {
-    event.preventDefault();
-});
+    document.getElementById("edit-listing-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+    });
+}
 
 const updateProperty = (id) => {
     const url = `/admin/update_property/${id}`;
