@@ -209,7 +209,6 @@ document.querySelector('.delete-button').addEventListener('click', (event) => {
 
 const openEditListingModal = (id) => { 
     const url = `get_property/${id}`;
-    console.log("Is it on");
 
     fetch(url)
         .then(response => {

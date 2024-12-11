@@ -358,3 +358,14 @@ def delete_property(property_id):
 
     flash('An error occurred while deleting the property.', 'error')
     return jsonify({'success': False, 'error': 'An error occurred while deleting the property.'}), 500
+
+@admin_bp.route('/get_property/<int:property_id>', methods=['GET'])
+@login_required
+@admin_only
+def get_property(property_id):
+    listing = queries.execute_query_with_results(queries.GET_LISTING_BY_ID, (property_id,), fetch_one=True, dictionary=True)
+
+    if listing:
+        return jsonify(listing)
+    
+    return jsonify({'error': 'Property not found.'}), 404
