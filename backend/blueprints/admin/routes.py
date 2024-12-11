@@ -284,10 +284,10 @@ def add_property():
 
     return render_template('admin/add_property.html')  # Render the form if GET request
 
-@admin_bp.route('/edit-property/<int:property_id>', methods=['GET', 'PUT'])
+@admin_bp.route('/update_property/<int:property_id>', methods=['GET', 'PUT'])
 @login_required
 @admin_only
-def edit_property(property_id):
+def update_property(property_id):
     if request.method == 'GET':
         # Fetch the listing data to prepopulate the form
         listing = queries.execute_query_with_results(queries.GET_LISTING_BY_ID, (property_id,), fetch_one=True, dictionary=True)
@@ -304,8 +304,7 @@ def edit_property(property_id):
     elif request.method == 'PUT':
         # Handle the update operation
         data = request.get_json()
-        
-        # Extract fields from the JSON payload
+    
         title = data.get('title')
         description = data.get('description')
         street_address = data.get('street_address')
