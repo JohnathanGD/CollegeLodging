@@ -201,3 +201,112 @@ document.querySelector('.delete-button').addEventListener('click', (event) => {
     event.preventDefault();
     deleteUser(event.target.dataset.userId);
 });
+
+const openEditListingModal = (id) => { 
+    const url = `get_property/${id}`;
+    console.log("Is it on");
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) { throw new Error("Network response was not ok"); }
+            return response.json();
+        })
+        .then(data => {
+            // Populate the form fields with the retrieved property data
+            document.getElementById("title").value = data.title;
+            document.getElementById("description").value = data.description;
+            document.getElementById("street_address").value = data.street_address;
+            document.getElementById("city").value = data.city;
+            document.getElementById("state").value = data.state;
+            document.getElementById("postal_code").value = data.postal_code;
+            document.getElementById("country").value = data.country;
+            document.getElementById("price").value = data.price;
+            document.getElementById("bedroom_count").value = data.bedroom_count;
+            document.getElementById("bathroom_count").value = data.bathroom_count;
+            document.getElementById("type").value = data.type;
+            document.querySelector("input[name='furnished']").checked = data.furnished;
+            document.querySelector("input[name='pets_allowed']").checked = data.pets_allowed;
+            document.querySelector("input[name='utilities_included']").checked = data.utilities_included;
+
+            // Show the modal content
+            showModalContent(".modal-edit-content");
+
+            // Enable form submission after cloning the submit button
+            const submitButton = document.querySelector(".submit-button");
+            submitButton.disabled = true;
+
+            const newSubmitButton = submitButton.cloneNode(true);
+            submitButton.parentNode.replaceChild(newSubmitButton, submitButton);
+
+            // Add event listener for the new button
+            newSubmitButton.addEventListener("click", function () {
+                updateProperty(id);
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching property data:", error);
+            showToast("error", "An error occurred while fetching property data.");
+        });
+};
+
+document.getElementById("edit-listing-form").addEventListener("input", function () {
+    document.querySelector(".submit-button").disabled = false;
+});
+
+document.getElementById("edit-listing-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+});
+
+const updateProperty = (id) => {
+    const url = `/admin/update_property/${id}`;
+
+    const formData = new FormData(document.getElementById("edit-listing-form"));
+
+    const updatedData = {
+        title: formData.get("title"),
+        description: formData.get("description"),
+        street_address: formData.get("street_address"),
+        city: formData.get("city"),
+        state: formData.get("state"),
+        postal_code: formData.get("postal_code"),
+        country: formData.get("country"),
+        price: parseFloat(formData.get("price")),
+        bedroom_count: parseInt(formData.get("bedroom_count")),
+        bathroom_count: parseInt(formData.get("bathroom_count")),
+        type: formData.get("type"),
+        furnished: formData.get("furnished") === "on",
+        pets_allowed: formData.get("pets_allowed") === "on",
+        utilities_included: formData.get("utilities_included") === "on",
+    };
+
+    console.log("Updating property:", updatedData);
+
+    fetch(url, {
+        method: 'PUT',
+        body: JSON.stringify(updatedData),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => { return response.json(); })
+    .then(data => {
+        if (data.error) { throw new Error(data.message); }
+        console.log("Property updated successfully:", data);
+        hideAllModalContent();
+        showToast("success", "Property updated successfully.");
+
+        // Update the listing UI dynamically
+        const propertyRow = document.getElementById(`property-row-${id}`);
+        if (propertyRow) {
+            propertyRow.querySelector(".property-title").textContent = updatedData.title;
+            propertyRow.querySelector(".property-price").textContent = `$${updatedData.price}`;
+            propertyRow.querySelector(".property-address").textContent = updatedData.street_address;
+        } else {
+            console.error("Failed to update property:", data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error updating property:", error);
+        showToast("error", "An error occurred while updating the property.");
+    });
+};

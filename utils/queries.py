@@ -158,7 +158,13 @@ GET_LISTINGS_BY_KEY = "SELECT * FROM listings WHERE %s = %s;"
 INSERT_NEW_LISTING = '''INSERT INTO listings (title, description, street_address, city, state, postal_code, country, price, bedroom_count, bathroom_count, furnished, pets_allowed, utilities_included, type)
 VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'''
 
-UPDATE_LISTING = "UPDATE listings SET %s = %s WHERE id = %s;"
+UPDATE_LISTING_BY_ID = """
+UPDATE listings
+SET title = %s, description = %s, street_address = %s, city = %s, state = %s, postal_code = %s,
+    country = %s, price = %s, bedroom_count = %s, bathroom_count = %s, furnished = %s, 
+    pets_allowed = %s, utilities_included = %s, type = %s
+WHERE id = %s;
+"""
 DELETE_LISTING = "DELETE FROM listings WHERE id = %s;"
 
 # Listing Image Queries
