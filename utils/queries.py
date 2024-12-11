@@ -165,7 +165,7 @@ SET title = %s, description = %s, street_address = %s, city = %s, state = %s, po
     pets_allowed = %s, utilities_included = %s, type = %s
 WHERE id = %s;
 """
-DELETE_LISTING = "DELETE FROM listings WHERE id = %s;"
+DELETE_LISTING_BY_ID = "DELETE FROM listings WHERE id = %s;"
 
 # Listing Image Queries
 GET_LISTING_IMAGE_BY_ID = "SELECT * FROM listing_images WHERE id = %s;"

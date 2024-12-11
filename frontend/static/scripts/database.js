@@ -193,19 +193,22 @@ function fetchFlashMessages() {
     });
 }
 
-
-document.querySelectorAll('.delete-button').forEach(button => {
-    button.addEventListener('click', function() {
-        const id = button.getAttribute('data-user-id');
-        console.log(`Deleting user with ID: ${id}`);
-        deleteUser(id);
+if (document.querySelectorAll('.delete-button')) {
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = button.getAttribute('data-user-id');
+            console.log(`Deleting user with ID: ${id}`);
+            deleteUser(id);
+        });
     });
-});
 
-document.querySelector('.delete-button').addEventListener('click', (event) => {
-    event.preventDefault();
-    deleteUser(event.target.dataset.userId);
-});
+    if (document.querySelector('.delete-button')) {
+        document.querySelector('.delete-button').addEventListener('click', (event) => {
+            event.preventDefault();
+            deleteUser(event.target.dataset.userId);
+        });
+    }
+}
 
 const openEditListingModal = (id) => { 
     const url = `get_property/${id}`;
@@ -317,3 +320,48 @@ const updateProperty = (id) => {
         showToast("error", "An error occurred while updating the property.");
     });
 };
+
+const deleteProperty = (id) => {
+    const url = `/admin/delete_property/${id}`;
+
+    fetch(url, {
+        method: 'DELETE',
+    })
+    .then(response => {
+        if (!response.ok) { throw new Error("Network response was not ok"); }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            const propertyRow = document.getElementById(`property-row-${id}`);
+            if (propertyRow) {
+                propertyRow.remove();
+            }
+        } else {
+            console.error("Failed to delete property:", data.message);
+        }
+
+        fetchFlashMessages();
+    })
+    .catch(error => {
+        console.error("Error deleting property:", error);
+        showToast("error", "An error occurred while deleting the property.");
+    });
+}
+
+if (document.querySelectorAll('.delete-property-button')) {
+    document.querySelectorAll('.delete-property-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = button.getAttribute('data-listing-id');
+            console.log(`Deleting property with ID: ${id}`);
+            deleteProperty(id);
+        });
+    });
+
+    if (document.querySelector('.delete-property-button')) {
+        document.querySelector('.delete-property-button').addEventListener('click', (event) => {
+            event.preventDefault();
+            deleteProperty(event.target.dataset.propertyId);
+        });
+    }
+}

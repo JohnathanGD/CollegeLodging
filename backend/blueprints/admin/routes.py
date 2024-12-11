@@ -342,7 +342,7 @@ def edit_property(property_id):
             return jsonify({'error': 'An error occurred while updating the property.'}), 500
 
 
-@admin_bp.route('/delete-property/<int:property_id>', methods=['DELETE'])
+@admin_bp.route('/delete_property/<int:property_id>', methods=['DELETE'])
 @login_required
 @admin_only
 def delete_property(property_id):

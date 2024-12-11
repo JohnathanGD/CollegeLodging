@@ -209,7 +209,7 @@
     background-color: var(--sidebar-color);
 }
 
-.delete-button {
+.delete-button, .delete-property-button {
     background-color: var(--red-color);
 }
 
