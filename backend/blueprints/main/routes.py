@@ -26,7 +26,7 @@ def apartment_search():
     return render_template('ApartmentSearch.html' , listings= listings)
 
 @main_bp.route('/apartment-search/<string:state>/<string:city>/<string:school>')
-@cache.cached(timeout=300, key_prefix="apartment_search_near_university")
+@cache.cached(timeout=300, key_prefix=lambda: request.full_path)
 def apartment_search_near_university(state, city, school):
     listings = []
     
