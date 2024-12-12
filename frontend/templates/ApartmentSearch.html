@@ -130,8 +130,8 @@
                                 Contact for price
                             {% endif %}
                         </p>
-                        <p><strong>Beds:</strong> {{ apartment.bedroom_count }} | <strong>Baths:</strong> {{ apartment.bathroom_count}}</p>
-                        <p><strong>Address:</strong> {{ apartment.street_address }}</p>
+                        <p><strong>Beds:</strong> {{ apartment.bedroom_count }} <strong>Baths:</strong> {{ apartment.bathroom_count}}</p>
+                        <p><strong>Address:</strong> {{ apartment.street_address }}, {{ apartment.city }}, {{ apartment.state }} {{ apartment.postal_code }}, {{ apartment.country }}</p>
                     </div>
                 {% endfor %}
             {% else %}

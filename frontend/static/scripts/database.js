@@ -201,13 +201,13 @@ if (document.querySelectorAll('.delete-button')) {
             deleteUser(id);
         });
     });
+}
 
-    if (document.querySelector('.delete-button')) {
-        document.querySelector('.delete-button').addEventListener('click', (event) => {
-            event.preventDefault();
-            deleteUser(event.target.dataset.userId);
-        });
-    }
+if (document.querySelector('.delete-button')) {
+    document.querySelector('.delete-button').addEventListener('click', (event) => {
+        event.preventDefault();
+        deleteUser(event.target.dataset.userId);
+    });
 }
 
 const openEditListingModal = (id) => { 
@@ -308,9 +308,17 @@ const updateProperty = (id) => {
         // Update the listing UI dynamically
         const propertyRow = document.getElementById(`property-row-${id}`);
         if (propertyRow) {
+            // Update each cell in the row
             propertyRow.querySelector(".property-title").textContent = updatedData.title;
+            propertyRow.querySelector(".property-description").textContent = updatedData.description;
             propertyRow.querySelector(".property-price").textContent = `$${updatedData.price}`;
-            propertyRow.querySelector(".property-address").textContent = updatedData.street_address;
+            propertyRow.querySelector(".property-address").textContent = `${updatedData.street_address}, ${updatedData.city}, ${updatedData.state}, ${updatedData.postal_code}, ${updatedData.country}`;
+            propertyRow.querySelector(".property-bedroom-count").textContent = `${updatedData.bedroom_count} Bedroom(s)`;
+            propertyRow.querySelector(".property-bathroom-count").textContent = `${updatedData.bathroom_count} Bathroom(s)`;
+            propertyRow.querySelector(".property-type").textContent = updatedData.type;
+            propertyRow.querySelector(".property-furnished").textContent = updatedData.furnished ? "Yes" : "No";
+            propertyRow.querySelector(".property-pets-allowed").textContent = updatedData.pets_allowed ? "Yes" : "No";
+            propertyRow.querySelector(".property-utilities-included").textContent = updatedData.utilities_included ? "Yes" : "No";
         } else {
             console.error("Failed to update property:", data.message);
         }
