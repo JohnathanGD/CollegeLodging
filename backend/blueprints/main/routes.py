@@ -44,3 +44,11 @@ def apartment_search_near_university(state, city, school):
         listings_cache[cache_key] = listings
 
     return render_template('ApartmentSearch.html', listings=listings)
+
+# @app.route('/apartment/<int:apartment_id>')
+# def apartment_details(apartment_id):
+#     # Fetch the apartment details using the apartment_id
+#     apartment = fetch_apartment_by_id(apartment_id)  # Define this function to query your database or API
+#     if not apartment:
+#         return "Apartment not found", 404
+#     return render_template('apartment_details.html', apartment=apartment)

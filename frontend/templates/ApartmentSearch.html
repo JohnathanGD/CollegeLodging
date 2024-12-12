@@ -130,8 +130,21 @@
                                 Contact for price
                             {% endif %}
                         </p>
-                        <p><strong>Beds:</strong> {{ apartment.bedroom_count }} <strong>Baths:</strong> {{ apartment.bathroom_count}}</p>
-                        <p><strong>Address:</strong> {{ apartment.street_address }}, {{ apartment.city }}, {{ apartment.state }} {{ apartment.postal_code }}, {{ apartment.country }}</p>
+                        <p><strong>Beds:</strong>
+                            {% if apartment.bedroom_count %}
+                                ${{ apartment.bedroom_count }}
+                            {% elif apartment.min_bed %}
+                                {% if apartment.min_bed == apartment.max_bed %}
+                                    {{ apartment.min_bed }}
+                                {% else %}
+                                    {{ apartment.min_bed }} - {{ apartment.max_bed }}
+                                {% endif %}
+                            {% else %}
+                                Contact for # beds
+                            {% endif %}
+                             <strong>Baths:</strong> 
+                             {{ apartment.bathroom_count}}</p>
+                        <p><strong>Address:</strong> {{ apartment.address}}</p>
                     </div>
                 {% endfor %}
             {% else %}
