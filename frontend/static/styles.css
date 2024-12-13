@@ -589,3 +589,61 @@ main {
     font-style: italic;
     color: #999;
 }
+
+/* Header for apartment details */
+.apartment-detail-title {
+    text-align: center;
+    margin: 1rem 0;
+    color: #333;
+}
+
+/* Container for apartment details */
+.apartment-detail-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Apartment images */
+.apartment-detail-image {
+    display: block;
+    margin: 1rem auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* List of apartment features */
+.apartment-detail-list {
+    list-style: none;
+    padding: 0;
+}
+
+.apartment-detail-list li {
+    background: #f1f1f1;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+/* Button for apartment actions */
+.apartment-action-button {
+    display: inline-block;
+    padding: 0.8rem 1.2rem;
+    background-color: #782F40;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.apartment-action-button:hover {
+    background-color: #38131c;
+}
+.apartment-detail-body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+}

@@ -4,32 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ apartment.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body>
-    <h1>{{ apartment.title }}</h1>
-    <p><strong>Address:</strong> {{ apartment.address }}</p>
-    <p><strong>Price:</strong> 
-        {% if apartment.min_price == apartment.max_price %}
-            ${{ apartment.min_price }}
-        {% else %}
-            {{ apartment.min_price }} - {{ apartment.max_price }}
-        {% endif %}
-    </p>
-    <p><strong>Beds:</strong> 
-        {% if apartment.min_bed == apartment.max_bed %}
-            {{ apartment.min_bed }}
-        {% else %}
-            {{ apartment.min_bed }} - {{ apartment.max_bed }}
-        {% endif %}
-    </p>
-    <p><strong>Phone:</strong> <a href="{{ apartment.phone }}">{{ apartment.phone }}</a></p>
-    <img src="{{ apartment.img_url }}" alt="Apartment Image" style="max-width: 100%; height: auto;">
-    <h3>Amenities:</h3>
-    <ul>
-        {% for amenity in apartment.amenities %}
-            <li>{{ amenity }}</li>
-        {% endfor %}
-    </ul>
-    <p><a href="{{ apartment.url }}">View on Apartments.com</a></p>
+<header class="header">
+    <div class="logo">College Lodging</div>
+    <nav class="navbar">
+        <ul class="nav-list">
+            <li><a href="{{ url_for('main.index') }}">Home</a></li>
+            <li><a href="#">Liked</a></li>
+            {% if current_user.is_admin %}
+                <li><a href="{{ url_for('admin.dashboard') }}">Dashboard</a></li>
+            {% endif %}
+            {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+            {% else %}
+                <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+<body class="apartment-detail-body"> 
+    <div class="apartment-detail-container">
+        <p><button onclick="window.history.back()" class="apartment-action-button">Go Back</button></p>
+        <h1 class="apartment-detail-title">{{ apartment.title }}</h1>
+        <img src="{{ apartment.img_url }}" alt="Apartment Image" class="apartment-detail-image">
+        
+        <div class="apartment-detail-info">
+            <p><strong>Address:</strong> {{ apartment.address }}</p>
+            <p><strong>Price:</strong> 
+                {% if apartment.min_price == apartment.max_price %}
+                    ${{ apartment.min_price }}
+                {% else %}
+                    {{ apartment.min_price }} - {{ apartment.max_price }}
+                {% endif %}
+            </p>
+            <p><strong>Beds:</strong> 
+                {% if apartment.min_bed == apartment.max_bed %}
+                    {{ apartment.min_bed }}
+                {% else %}
+                    {{ apartment.min_bed }} - {{ apartment.max_bed }}
+                {% endif %}
+            </p>
+            <p><strong>Phone:</strong> <a href="tel:{{ apartment.phone }}">{{ apartment.phone }}</a></p>
+        </div>
+
+        <h3 class="apartment-detail-amenities-title">Amenities:</h3>
+        <ul class="apartment-detail-list">
+            {% for amenity in apartment.amenities %}
+                <li>{{ amenity }}</li>
+            {% endfor %}
+        </ul>
+
+        <p>
+            <a href="{{ apartment.url }}" class="apartment-action-button">View on Apartments.com</a>
+        </p>
+    </div>
 </body>
 </html>

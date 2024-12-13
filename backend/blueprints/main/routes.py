@@ -20,10 +20,10 @@ def apartment_search():
     cursor = connection.cursor(dictionary=True)
     query = "SELECT * FROM listings"
     cursor.execute(query)
-    listings = cursor.fetchall()
+    properties = cursor.fetchall()
 
     cursor.close()
-    return render_template('ApartmentSearch.html' , listings= listings)
+    return render_template('ApartmentSearch.html' , listings= properties)
 
 @main_bp.route('/apartment-search/<string:state>/<string:city>/<string:school>')
 @cache.cached(timeout=300, key_prefix=lambda: request.full_path)
@@ -38,12 +38,12 @@ def apartment_search_near_university(state, city, school):
     cache_key = f"{state}_{city}_{school}"
 
     if cache_key in listings_cache:
-        listings = listings_cache[cache_key]
+        properties = listings_cache[cache_key]
     else:
-        listings = get_listing_near_university(state, city, school)
-        listings_cache[cache_key] = listings
+        properties = get_listing_near_university(state, city, school)
+        listings_cache[cache_key] = properties
 
-    return render_template('ApartmentSearch.html', listings=listings)
+    return render_template('ApartmentSearch.html', listings=properties)
 
 @main_bp.route('/apartment/<int:apartment_id>')
 def apartment_details(apartment_id):
@@ -55,11 +55,8 @@ def apartment_details(apartment_id):
 
 # Function to fetch apartment details
 def fetch_apartment_from_db(apartment_id):
-    """
-    Fetch an apartment's details by its ID from the cached listings.
-    """
-    for cache_key, listings in listings_cache.items():
-        for apartment in listings:
+    for cache_key, property in listings_cache.items():
+        for apartment in property:
             if apartment["id"] == apartment_id:
                 return apartment
     return None

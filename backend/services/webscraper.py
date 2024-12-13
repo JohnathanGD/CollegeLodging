@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import re
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')  # Run in headless mode
@@ -19,7 +20,22 @@ def export_to_file(filename, data):
     with open(filename, 'w') as file:
         for item in data:
             file.write(item + '\n')
-    
+
+def format_phone_number(phone):
+    """
+    Format a phone number string from 'tel:xxxxxxxxxx' to '(xxx)xxx-xxxx'.
+    """
+    # Extract the numeric part from 'tel:'
+    match = re.search(r'tel:(\d+)', phone)
+    if match:
+        digits = match.group(1)
+        # Ensure it has 10 digits before formatting
+        if len(digits) == 10:
+            return f"tel:({digits[:3]}){digits[3:6]}-{digits[6:]}"
+    # Return the original phone if it doesn't match or isn't valid
+    return phone
+
+
 def get_listing_near_university(state, city, school):
     base_url = "https://www.apartments.com/off-campus-housing/"
     data = []
@@ -59,6 +75,7 @@ def get_listing_near_university(state, city, school):
                 
                 min_price, max_price = (price.split("-") if "-" in price else (price, price))
                 min_bed, max_bed = (beds.split("-") if "-" in beds else (beds, beds))
+                formatted_phone = format_phone_number(phone)
 
                 data.append({
                     "id": count,
@@ -69,7 +86,7 @@ def get_listing_near_university(state, city, school):
                     "max_price": max_price,
                     "min_bed": min_bed,
                     "max_bed": max_bed,
-                    "phone": phone,
+                    "phone": formatted_phone,
                     "img_url": img_url,
                     "amenities": amenities
                 })
