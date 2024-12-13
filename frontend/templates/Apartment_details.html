@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ apartment.title }}</title>
+</head>
+<body>
+    <h1>{{ apartment.title }}</h1>
+    <p><strong>Address:</strong> {{ apartment.address }}</p>
+    <p><strong>Price:</strong> 
+        {% if apartment.min_price == apartment.max_price %}
+            ${{ apartment.min_price }}
+        {% else %}
+            {{ apartment.min_price }} - {{ apartment.max_price }}
+        {% endif %}
+    </p>
+    <p><strong>Beds:</strong> 
+        {% if apartment.min_bed == apartment.max_bed %}
+            {{ apartment.min_bed }}
+        {% else %}
+            {{ apartment.min_bed }} - {{ apartment.max_bed }}
+        {% endif %}
+    </p>
+    <p><strong>Phone:</strong> <a href="{{ apartment.phone }}">{{ apartment.phone }}</a></p>
+    <img src="{{ apartment.img_url }}" alt="Apartment Image" style="max-width: 100%; height: auto;">
+    <h3>Amenities:</h3>
+    <ul>
+        {% for amenity in apartment.amenities %}
+            <li>{{ amenity }}</li>
+        {% endfor %}
+    </ul>
+    <p><a href="{{ apartment.url }}">View on Apartments.com</a></p>
+</body>
+</html>

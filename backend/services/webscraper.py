@@ -38,7 +38,7 @@ def get_listing_near_university(state, city, school):
             li_elements = ul_element.find_elements(By.CLASS_NAME, "mortar-wrapper")
 
             print(f"Number of listings: {len(li_elements)}")
-
+            count = 1
             for li in li_elements:
                 try:
                     url = li.find_element(By.CLASS_NAME, "property-link").get_attribute("href")
@@ -46,7 +46,6 @@ def get_listing_near_university(state, city, school):
                     address = li.find_element(By.CLASS_NAME, "property-address").text
                     price = li.find_element(By.CLASS_NAME, "property-pricing").text
                     beds = li.find_element(By.CLASS_NAME, "property-beds").text
-                    #bath = li.find_element(By.CLASS_NAME, "property-baths").text
                     phone = li.find_element(By.CLASS_NAME, "phone-link").get_attribute("href")
                     img_url = li.find_element(By.CLASS_NAME, "carousel-item").find_element(By.TAG_NAME, "img").get_attribute("src")
 
@@ -60,9 +59,9 @@ def get_listing_near_university(state, city, school):
                 
                 min_price, max_price = (price.split("-") if "-" in price else (price, price))
                 min_bed, max_bed = (beds.split("-") if "-" in beds else (beds, beds))
-                #min_bath, max_bath = (beds.split("-") if "-" in bath else (bath, bath))
 
                 data.append({
+                    "id": count,
                     "url": url,
                     "title": title,
                     "address": address,
@@ -70,12 +69,11 @@ def get_listing_near_university(state, city, school):
                     "max_price": max_price,
                     "min_bed": min_bed,
                     "max_bed": max_bed,
-                    # "min_bath": min_bath,
-                    # "max_bath": max_bath,
                     "phone": phone,
                     "img_url": img_url,
                     "amenities": amenities
                 })
+                count += 1
 
     except Exception as e:
         print(f"Error: {e}")

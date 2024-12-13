@@ -45,10 +45,21 @@ def apartment_search_near_university(state, city, school):
 
     return render_template('ApartmentSearch.html', listings=listings)
 
-# @app.route('/apartment/<int:apartment_id>')
-# def apartment_details(apartment_id):
-#     # Fetch the apartment details using the apartment_id
-#     apartment = fetch_apartment_by_id(apartment_id)  # Define this function to query your database or API
-#     if not apartment:
-#         return "Apartment not found", 404
-#     return render_template('apartment_details.html', apartment=apartment)
+@main_bp.route('/apartment/<int:apartment_id>')
+def apartment_details(apartment_id):
+    # Fetch apartment data using the apartment_id
+    apartment = fetch_apartment_from_db(apartment_id)  # Replace with your DB/API call
+    if not apartment:
+        return "Apartment not found", 404
+    return render_template('apartment_details.html', apartment=apartment)
+
+# Function to fetch apartment details
+def fetch_apartment_from_db(apartment_id):
+    """
+    Fetch an apartment's details by its ID from the cached listings.
+    """
+    for cache_key, listings in listings_cache.items():
+        for apartment in listings:
+            if apartment["id"] == apartment_id:
+                return apartment
+    return None
