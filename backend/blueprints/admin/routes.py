@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, current_app as app, g, url_for, flash, jsonify
+from flask import Blueprint, render_template, request, redirect, current_app as app, g, url_for, flash, jsonify, get_flashed_messages
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from backend.models.users import User
 from backend.models.listings import Listing
@@ -13,6 +13,13 @@ import base64
 admin_bp = Blueprint('admin', __name__)
 PAGINATION_LIMIT = 10
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+@admin_bp.route('/get_flash_messages', methods=['GET'])
+@login_required
+@admin_only
+def get_flash_messages():
+    messages = get_flashed_messages(with_categories=True)
+    return jsonify(messages=messages)
 
 @admin_bp.route('/signup', methods=['GET', 'POST'])
 @unauthenticated_user
@@ -50,7 +57,6 @@ def signup():
             return redirect(url_for('admin.signup'))
         
     return render_template('admin/admin_signup.html')
-
 
 @admin_bp.route('/dashboard')
 @login_required
@@ -118,23 +124,57 @@ def get_user(user_id):
 @admin_only
 def delete_user(user_id):
     if user_id == current_user.id:
+        flash('You cannot delete yourself.', 'error')
         return jsonify({
             'success': False,
             'error': 'You cannot delete yourself.',
         }), 400
     
     if queries.execute_query(queries.DELETE_USER_BY_ID, (user_id,)):
+        flash('User deleted successfully.', 'success')
         return jsonify({
             'success': True,
             'message': 'User deleted successfully.'
         }), 200
-    
+
+    flash('An error occurred while deleting the user.', 'error')
     return jsonify({
         'success': False,
         'error': 'An error occurred while deleting the user.'
     }), 500
+    
+@admin_bp.route('/update_user/<int:user_id>', methods=['PUT'])
+@login_required
+@admin_only    
+def update_user(user_id):
+    user = User.get_by_id(user_id)
+    if user:
+        data = request.get_json()
+        firstname = data.get('firstname')
+        lastname = data.get('lastname')
+        email = data.get('email')
+        roles = data.get('roles')
 
+        if user.email != email and User.get_by_email(email):
+            flash('User with this email already exists.', 'error')
+            return jsonify({'error': 'User with this email already exists.'}), 400
 
+        if user.firstname == firstname and user.lastname == lastname and user.email == email and user.roles == roles:
+            flash('No changes detected.', 'info')
+            return jsonify({'message': 'No changes detected.'}), 200
+
+        if queries.execute_query(queries.UPDATE_USER_NAME_AND_EMAIL, (email, firstname, lastname, user_id)):
+            flash('User updated successfully.', 'success')
+            return jsonify({'message': 'User updated successfully.'}), 200
+
+        app.logger.debug(f'Updating user {user_id} with data: {data}')
+        flash('An error occurred while updating the user.', 'error')
+        return jsonify({'error': 'An error occurred while updating the user.'}), 500
+
+    flash('User not found.', 'error')
+    return jsonify({'error': 'User not found.'}), 404
+
+# Listings
 @admin_bp.route('/properties')
 @login_required
 @admin_only
@@ -188,8 +228,6 @@ def get_listings():
             }
 
     return list(listings_dict.values())
-
-
 
 @admin_bp.route('/add-property', methods=['GET', 'POST'])
 @login_required
@@ -245,3 +283,88 @@ def add_property():
         return redirect(url_for('admin.properties'))  # Redirect to properties page
 
     return render_template('admin/add_property.html')  # Render the form if GET request
+
+@admin_bp.route('/update_property/<int:property_id>', methods=['GET', 'PUT'])
+@login_required
+@admin_only
+def update_property(property_id):
+    if request.method == 'GET':
+        # Fetch the listing data to prepopulate the form
+        listing = queries.execute_query_with_results(queries.GET_LISTING_BY_ID, (property_id,), fetch_one=True, dictionary=True)
+        
+        if not listing:
+            flash('Property not found.', 'error')
+            return redirect(url_for('admin.properties'))
+        
+        # Format the date if necessary
+        listing['created_at'] = listing['created_at'].strftime('%B %d, %Y %I:%M %p')
+        
+        return render_template('admin/edit_property.html', listing=listing)
+    
+    elif request.method == 'PUT':
+        # Handle the update operation
+        data = request.get_json()
+    
+        title = data.get('title')
+        description = data.get('description')
+        street_address = data.get('street_address')
+        city = data.get('city')
+        state = data.get('state')
+        postal_code = data.get('postal_code')
+        country = data.get('country')
+        price = float(data.get('price', 0))
+        bedroom_count = int(data.get('bedroom_count', 0))
+        bathroom_count = float(data.get('bathroom_count', 0))
+        furnished = data.get('furnished', False)
+        pets_allowed = data.get('pets_allowed', False)
+        utilities_included = data.get('utilities_included', False)
+        type = data.get('type')
+        
+        # Validate required fields
+        required_fields = [title, description, street_address, city, state, postal_code, country, price, bedroom_count, bathroom_count, type]
+        if not all(required_fields):
+            return jsonify({'error': 'All required fields must be filled out.'}), 400
+        
+        # Update the listing in the database
+        params = (
+            title, description, street_address, city, state, postal_code, country, price, 
+            bedroom_count, bathroom_count, furnished, pets_allowed, utilities_included, type, property_id
+        )
+        
+        success = queries.execute_query(queries.UPDATE_LISTING_BY_ID, params)
+        
+        if success:
+            flash('Property updated successfully!', 'success')
+            return jsonify({'message': 'Property updated successfully.'}), 200
+        else:
+            flash('An error occurred while updating the property.', 'error')
+            return jsonify({'error': 'An error occurred while updating the property.'}), 500
+
+
+@admin_bp.route('/delete_property/<int:property_id>', methods=['DELETE'])
+@login_required
+@admin_only
+def delete_property(property_id):
+    listing = queries.execute_query_with_results(queries.GET_LISTING_BY_ID, (property_id,), fetch_one=True, dictionary=True)
+
+    if not listing:
+        flash('Property not found.', 'error')
+        return jsonify({'success': False, 'error': 'Property not found.'}), 404
+
+    if queries.execute_query(queries.DELETE_LISTING_BY_ID, (property_id,)):
+        flash('Property deleted successfully.', 'success')
+        return jsonify({'success': True, 'message': 'Property deleted successfully.'}), 200
+
+    flash('An error occurred while deleting the property.', 'error')
+    return jsonify({'success': False, 'error': 'An error occurred while deleting the property.'}), 500
+
+@admin_bp.route('/get_property/<int:property_id>', methods=['GET'])
+@login_required
+@admin_only
+def get_property(property_id):
+    listing = queries.execute_query_with_results(queries.GET_LISTING_BY_ID, (property_id,), fetch_one=True, dictionary=True)
+
+    if listing:
+        return jsonify(listing)
+    
+    return jsonify({'error': 'Property not found.'}), 404

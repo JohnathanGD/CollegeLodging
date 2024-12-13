@@ -176,75 +176,108 @@
     background-color: #682b39;
 }
 
-
-/* Styles for the search container and background */
 .search-container-home {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    min-height: 400px; /* Same as the minimum height of the background */
-    height: 30vh; /* Take up 50% of the viewport height */
-    width: 100%; /* Full width of the screen */
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: 20px;
+    position: relative;
 }
 
+/* Background image section */
 .search-background-home {
-    background-image: url('images/tallahassee3.png'); /* Your background image here */
+    background-image: url('images/tallahassee3.png');
     background-size: cover;
     background-position: center;
-    position: absolute;
-    width: 100%; 
-    height: calc(50vh - 100px); /* Adjusted height to avoid covering the header */
-    padding: 100px;
-    min-height: 400px; /* Set a minimum height to prevent it from shrinking */
+    width: 100%;
+    aspect-ratio: 21 / 9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    padding-top: 50px;
+}
+
+.search-background-home h1 {
+    font-size: 4rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.search-box-home {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(100px); /* Apply blur effect */
-    margin-bottom: 80px; /* Adds space below the image section */
-    padding-bottom: 20px; /* Adds space below without shrinking the image */
+    width: 100%;;
+    max-width: 800px;
+    position: absolute;
+    top: calc(50% + 50px);
 }
 
-.search-background-home h1 {
-    font-size: 3rem;
+.search-bar-container {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+
+#search-bar {
+    flex: 1;
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    height: 50px;
+}
+
+/* Search button */
+#home-search-btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: var(--secondary-color);
     color: white;
-    margin-bottom: 20px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Shadow to make text more readable */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
 }
 
-.search-box-home {
-    text-align: center;
-    padding: 20px;
-    width: auto;
-    background-color: #782F40;
-    border-radius: 10px;
+#home-search-btn:hover {
+    background-color: var(--primary-color);
+}
+
+/* Suggestions box */
+#suggestions {
+    display: none;
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.search-box-home input {
-    padding: 15px;
-    font-size: 18px;
-    border-radius: 8px;
-    width: 50%;
-    border: none;
-    width: 70%;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.search-box-home button {
-    padding: 14px;
-    font-size: 18px;
-    background-color:#CEB888;
-    color: white;
-    border: none;
-    border-radius: 8px;
+#suggestions div {
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
     cursor: pointer;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.search-box-home button:hover {
-    background-color: #e64a19;
+#suggestions div:hover {
+    background-color: #f0f0f0;
 }
 
 body {
@@ -555,4 +588,62 @@ main {
     text-align: center;
     font-style: italic;
     color: #999;
+}
+
+/* Header for apartment details */
+.apartment-detail-title {
+    text-align: center;
+    margin: 1rem 0;
+    color: #333;
+}
+
+/* Container for apartment details */
+.apartment-detail-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Apartment images */
+.apartment-detail-image {
+    display: block;
+    margin: 1rem auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* List of apartment features */
+.apartment-detail-list {
+    list-style: none;
+    padding: 0;
+}
+
+.apartment-detail-list li {
+    background: #f1f1f1;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+/* Button for apartment actions */
+.apartment-action-button {
+    display: inline-block;
+    padding: 0.8rem 1.2rem;
+    background-color: #782F40;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.apartment-action-button:hover {
+    background-color: #38131c;
+}
+.apartment-detail-body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
 }

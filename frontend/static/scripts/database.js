@@ -58,9 +58,7 @@ const openEditModal = (id) => {
 
     fetch(url)
         .then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
+            if (!response.ok) { throw new Error("Network response was not ok"); }
             return response.json();
         })
         .then(data => {
@@ -72,44 +70,306 @@ const openEditModal = (id) => {
             document.getElementById("created-at").value = data.created_at;
 
             showModalContent(".modal-edit-content");
-            document.querySelector(".submit-button").disabled = true;
+
+            const submitButton = document.querySelector(".submit-button");
+            submitButton.disabled = true;
+
+            const newSubmitButton = submitButton.cloneNode(true);
+            submitButton.parentNode.replaceChild(newSubmitButton, submitButton);
+
+
+            newSubmitButton.addEventListener("click", function () {
+                updateUser(id);
+            });
         })
         .catch(error => {
             console.error("Error fetching user data:", error);
+            showToast("error", "An error occurred while fetching user data.");
         });
 };
 
+
+if (document.getElementById("edit-user-form")) {
+    document.getElementById("edit-user-form").addEventListener("input", function (event) {
+        document.querySelector(".submit-button").disabled = false;
+        event.preventDefault();
+    });
+
+    document.getElementById("edit-user-form").addEventListener("input", function () {
+        document.querySelector(".submit-button").disabled = false;
+    });
+}
+
+const updateUser = (id) => {
+    const url = `/admin/update_user/${id}`;
+
+    const formData = new FormData(document.getElementById("edit-user-form"));
+
+    const updatedData = {
+        id: formData.get("user-id"),
+        firstname: formData.get("first-name"),
+        lastname: formData.get("last-name"),
+        email: formData.get("email"),
+        roles: formData.get("roles"),
+    };
+
+    console.log("Updating user:", updatedData);
+
+    fetch(url, {
+        method: 'PUT',
+        body: JSON.stringify(updatedData),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => { return response.json(); })
+    .then(data => {
+        if (data.error) { throw new Error(data.message); }
+        console.log("User updated successfully:", data);
+        hideAllModalContent();
+        showToast("success", "User updated successfully.");
+
+        const userRow = document.getElementById(`user-row-${id}`);
+        if (userRow) {
+            userRow.querySelector(".user-firstname").textContent = updatedData.firstname;
+            userRow.querySelector(".user-lastname").textContent = updatedData.lastname;
+            userRow.querySelector(".user-email").textContent = updatedData.email;
+        } else {
+            console.error("Failed to update user:", data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error updating user:", error);
+        showToast("error", "An error occurred while updating the user.");
+    });
+}
+
 const deleteUser = (id) => {
-    const url = `delete_user/${id}`;
+    const url = `/admin/delete_user/${id}`;
 
     fetch(url, {
         method: 'DELETE',
     })
     .then(response => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
+        if (!response.ok) { throw new Error("Network response was not ok"); }
         return response.json();
     })
     .then(data => {
-        console.log(data);
         if (data.success) {
+            console.log("User deleted successfully:", id);
             const userRow = document.getElementById(`user-row-${id}`);
             if (userRow) {
                 userRow.remove();
-                alert("User deleted successfully");
-            } else {
-                console.error(`User row with ID user-row-${id} not found`);
             }
         } else {
-            alert("Failed to delete user");
+            console.error("Failed to delete user:", data.message);
         }
+
+        fetchFlashMessages();
     })
     .catch(error => {
         console.error("Error deleting user:", error);
+        showToast("error", "An error occurred while deleting the user.");
     });
 };
 
-document.getElementById("edit-user-form").addEventListener("input", function () {
-    document.querySelector(".submit-button").disabled = false;
-});
+function fetchFlashMessages() {
+    fetch(`get_flash_messages`, { 
+        method: 'GET', 
+    })
+    .then(response => {
+        if (response.status === 404) { return; }
+        if (!response.ok) { throw new Error("Network response was not ok"); }
+        return response.json();
+    })
+    .then(data => {
+        data.messages.forEach(([category, message]) => {
+            showToast(category, message);
+        });
+    })
+    .catch(error => {
+        console.error("Error fetching flash messages:", error);
+        showToast("error", "An error occurred while fetching flash messages.");
+    });
+}
+
+if (document.querySelectorAll('.delete-button')) {
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = button.getAttribute('data-user-id');
+            console.log(`Deleting user with ID: ${id}`);
+            deleteUser(id);
+        });
+    });
+}
+
+if (document.querySelector('.delete-button')) {
+    document.querySelector('.delete-button').addEventListener('click', (event) => {
+        event.preventDefault();
+        deleteUser(event.target.dataset.userId);
+    });
+}
+
+const openEditListingModal = (id) => { 
+    const url = `get_property/${id}`;
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) { throw new Error("Network response was not ok"); }
+            return response.json();
+        })
+        .then(data => {
+            // Populate the form fields with the retrieved property data
+            document.getElementById("title").value = data.title;
+            document.getElementById("description").value = data.description;
+            document.getElementById("street_address").value = data.street_address;
+            document.getElementById("city").value = data.city;
+            document.getElementById("state").value = data.state;
+            document.getElementById("postal_code").value = data.postal_code;
+            document.getElementById("country").value = data.country;
+            document.getElementById("price").value = data.price;
+            document.getElementById("bedroom_count").value = data.bedroom_count;
+            document.getElementById("bathroom_count").value = data.bathroom_count;
+            document.getElementById("type").value = data.type;
+            document.querySelector("input[name='furnished']").checked = data.furnished;
+            document.querySelector("input[name='pets_allowed']").checked = data.pets_allowed;
+            document.querySelector("input[name='utilities_included']").checked = data.utilities_included;
+
+            // Show the modal content
+            showModalContent(".modal-edit-content");
+
+            // Enable form submission after cloning the submit button
+            const submitButton = document.querySelector(".submit-button");
+            submitButton.disabled = true;
+
+            const newSubmitButton = submitButton.cloneNode(true);
+            submitButton.parentNode.replaceChild(newSubmitButton, submitButton);
+
+            // Add event listener for the new button
+            newSubmitButton.addEventListener("click", function () {
+                updateProperty(id);
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching property data:", error);
+            showToast("error", "An error occurred while fetching property data.");
+        });
+};
+
+if (document.getElementById("edit-listing-form")) {
+    document.getElementById("edit-listing-form").addEventListener("input", function (event) {
+        document.querySelector(".submit-button").disabled = false;
+        event.preventDefault();
+    });
+
+    document.getElementById("edit-listing-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+    });
+}
+
+const updateProperty = (id) => {
+    const url = `/admin/update_property/${id}`;
+
+    const formData = new FormData(document.getElementById("edit-listing-form"));
+
+    const updatedData = {
+        title: formData.get("title"),
+        description: formData.get("description"),
+        street_address: formData.get("street_address"),
+        city: formData.get("city"),
+        state: formData.get("state"),
+        postal_code: formData.get("postal_code"),
+        country: formData.get("country"),
+        price: parseFloat(formData.get("price")),
+        bedroom_count: parseInt(formData.get("bedroom_count")),
+        bathroom_count: parseInt(formData.get("bathroom_count")),
+        type: formData.get("type"),
+        furnished: formData.get("furnished") === "on",
+        pets_allowed: formData.get("pets_allowed") === "on",
+        utilities_included: formData.get("utilities_included") === "on",
+    };
+
+    console.log("Updating property:", updatedData);
+
+    fetch(url, {
+        method: 'PUT',
+        body: JSON.stringify(updatedData),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => { return response.json(); })
+    .then(data => {
+        if (data.error) { throw new Error(data.message); }
+        console.log("Property updated successfully:", data);
+        hideAllModalContent();
+        showToast("success", "Property updated successfully.");
+
+        // Update the listing UI dynamically
+        const propertyRow = document.getElementById(`property-row-${id}`);
+        if (propertyRow) {
+            // Update each cell in the row
+            propertyRow.querySelector(".property-title").textContent = updatedData.title;
+            propertyRow.querySelector(".property-description").textContent = updatedData.description;
+            propertyRow.querySelector(".property-price").textContent = `$${updatedData.price}`;
+            propertyRow.querySelector(".property-address").textContent = `${updatedData.street_address}, ${updatedData.city}, ${updatedData.state}, ${updatedData.postal_code}, ${updatedData.country}`;
+            propertyRow.querySelector(".property-bedroom-count").textContent = `${updatedData.bedroom_count} Bedroom(s)`;
+            propertyRow.querySelector(".property-bathroom-count").textContent = `${updatedData.bathroom_count} Bathroom(s)`;
+            propertyRow.querySelector(".property-type").textContent = updatedData.type;
+            propertyRow.querySelector(".property-furnished").textContent = updatedData.furnished ? "Yes" : "No";
+            propertyRow.querySelector(".property-pets-allowed").textContent = updatedData.pets_allowed ? "Yes" : "No";
+            propertyRow.querySelector(".property-utilities-included").textContent = updatedData.utilities_included ? "Yes" : "No";
+        } else {
+            console.error("Failed to update property:", data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error updating property:", error);
+        showToast("error", "An error occurred while updating the property.");
+    });
+};
+
+const deleteProperty = (id) => {
+    const url = `/admin/delete_property/${id}`;
+
+    fetch(url, {
+        method: 'DELETE',
+    })
+    .then(response => {
+        if (!response.ok) { throw new Error("Network response was not ok"); }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            const propertyRow = document.getElementById(`property-row-${id}`);
+            if (propertyRow) {
+                propertyRow.remove();
+            }
+        } else {
+            console.error("Failed to delete property:", data.message);
+        }
+
+        fetchFlashMessages();
+    })
+    .catch(error => {
+        console.error("Error deleting property:", error);
+        showToast("error", "An error occurred while deleting the property.");
+    });
+}
+
+if (document.querySelectorAll('.delete-property-button')) {
+    document.querySelectorAll('.delete-property-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = button.getAttribute('data-listing-id');
+            console.log(`Deleting property with ID: ${id}`);
+            deleteProperty(id);
+        });
+    });
+
+    if (document.querySelector('.delete-property-button')) {
+        document.querySelector('.delete-property-button').addEventListener('click', (event) => {
+            event.preventDefault();
+            deleteProperty(event.target.dataset.propertyId);
+        });
+    }
+}

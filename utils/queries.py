@@ -114,7 +114,7 @@ UPDATE_USER_EMAIL = "UPDATE users SET email = %s WHERE id = %s;"
 UPDATE_USER_FIRSTNAME = "UPDATE users SET firstname = %s WHERE id = %s;"
 UPDATE_USER_LASTNAME = "UPDATE users SET lastname = %s WHERE id = %s;"
 UPDATE_USER_IS_ADMIN_STATUS = "UPDATE users SET is_admin = %s WHERE id = %s;"
-
+UPDATE_USER_NAME_AND_EMAIL = "UPDATE users SET email = %s, firstname = %s, lastname = %s WHERE id = %s;"
 DELETE_USER_BY_ID = "DELETE FROM users WHERE id = %s;"
 
 # Role Queries
@@ -158,8 +158,14 @@ GET_LISTINGS_BY_KEY = "SELECT * FROM listings WHERE %s = %s;"
 INSERT_NEW_LISTING = '''INSERT INTO listings (title, description, street_address, city, state, postal_code, country, price, bedroom_count, bathroom_count, furnished, pets_allowed, utilities_included, type)
 VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'''
 
-UPDATE_LISTING = "UPDATE listings SET %s = %s WHERE id = %s;"
-DELETE_LISTING = "DELETE FROM listings WHERE id = %s;"
+UPDATE_LISTING_BY_ID = """
+UPDATE listings
+SET title = %s, description = %s, street_address = %s, city = %s, state = %s, postal_code = %s,
+    country = %s, price = %s, bedroom_count = %s, bathroom_count = %s, furnished = %s, 
+    pets_allowed = %s, utilities_included = %s, type = %s
+WHERE id = %s;
+"""
+DELETE_LISTING_BY_ID = "DELETE FROM listings WHERE id = %s;"
 
 # Listing Image Queries
 GET_LISTING_IMAGE_BY_ID = "SELECT * FROM listing_images WHERE id = %s;"

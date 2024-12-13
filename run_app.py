@@ -18,6 +18,8 @@ def check_and_install_requirements():
         import dotenv  
         import werkzeug    
         import flask_caching 
+        import selenium
+        import webdriver_manager.chrome
     except ImportError as e:
         package_name = str(e).split("'")[1]  # Extract missing package name
         print(f"Package '{package_name}' is not installed.")
