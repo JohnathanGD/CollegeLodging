@@ -137,6 +137,12 @@
                         <p><strong>Beds:</strong> {{ apartment.bedroom_count }} | <strong>Baths:</strong> {{ apartment.bathroom_count}}</p>
                         <p><strong>Address:</strong> {{ apartment.street_address }}</p>
                         <p>{{ apartment.description }}</p>
+                        <button 
+                        class="like-button" 
+                        data-apartment-id="{{ apartment.id }}"
+                    >
+                        ❤️ Like
+                    </button>
                     </div>
                 {% endfor %}
             {% else %}

@@ -34,6 +34,7 @@ def setup_db():
             cursor.execute(queries.CREATE_USERS_TABLE)
             cursor.execute(queries.CREATE_ROLES_TABLE)
             cursor.execute(queries.CREATE_USER_ROLES_TABLE)
+            cursor.execute(queries.CREATE_LIKES_TABLE)
 
             roles = ['admin', 'user']
 
