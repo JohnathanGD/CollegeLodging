@@ -60,3 +60,14 @@ def fetch_apartment_from_db(apartment_id):
             if apartment["id"] == apartment_id:
                 return apartment
     return None
+    
+@main_bp.route('/give-feedback', methods=['POST'])
+def give_feedback():
+    name = request.form.get('name')
+    email = request.form.get('email')
+    feedback = request.form.get('feedback')
+
+    # this is where I would recieve the feedback and add it to some type of database
+
+    # Redirect to homepage
+    return redirect(url_for('main.index'))
